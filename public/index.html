@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#16458a">
+    <title>Evaluaciones en línea</title>
+    <link rel="stylesheet" href="assets/app.css">
+    <script src="assets/app.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="header-content">
+        <a class="brand" href="index.html" aria-label="Evaluaciones en línea, inicio">
+            <span class="brand-mark" aria-hidden="true">E</span>
+            <span>Evaluaciones<span class="brand-subtitle">Plataforma en línea</span></span>
+        </a>
+        <span class="header-label">Acceso a la plataforma</span>
+    </div>
+</header>
+
+<main class="layout">
+    <section class="intro" aria-labelledby="welcome-title">
+        <span class="eyebrow">APRENDIZAJE EN LÍNEA</span>
+        <h1 id="welcome-title">Un espacio para aprender y evaluar</h1>
+        <p>Accede a tu cuenta para empezar. Esta plataforma se encuentra en desarrollo y actualmente permite iniciar sesión y registrar estudiantes y docentes.</p>
+        <div class="intro-note">
+            <span class="note-icon" aria-hidden="true">✓</span>
+            <p><strong>Acceso según tu rol</strong><br>Administradores, docentes y estudiantes ingresan con su correo y contraseña.</p>
+        </div>
+    </section>
+
+    <section class="card" aria-label="Acceso a la cuenta">
+        <p id="status" class="status" role="status" aria-live="polite">Conectando con el servidor...</p>
+        <noscript><p class="notice">Activa JavaScript para usar esta aplicación.</p></noscript>
+
+        <div id="guest" hidden>
+            <nav class="tabs" aria-label="Opciones de acceso">
+                <button id="show-login" class="tab active" type="button" aria-controls="login-panel" aria-current="page">Iniciar sesión</button>
+                <button id="show-register" class="tab" type="button" aria-controls="register-panel">Crear cuenta</button>
+            </nav>
+            <section id="login-panel" aria-labelledby="login-title">
+                <h2 id="login-title">Bienvenido de nuevo</h2>
+                <p class="muted">Ingresa tus datos para acceder a tu cuenta.</p>
+                <form id="login">
+                    <label for="login-email">Correo electrónico</label>
+                    <input id="login-email" name="correo" type="email" placeholder="tu@correo.com" maxlength="254" required autocomplete="email">
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" name="password" type="password" required autocomplete="current-password">
+                    <button class="primary-button" type="submit">Ingresar</button>
+                </form>
+                <p class="form-footer">¿No tienes cuenta? <button class="text-button" id="register-link" type="button">Regístrate</button></p>
+            </section>
+
+            <section id="register-panel" aria-labelledby="register-title" hidden>
+                <h2 id="register-title">Crear cuenta</h2>
+                <p class="muted">Completa tus datos para registrarte.</p>
+                <form id="register">
+                    <label for="register-name">Nombre completo</label>
+                    <input id="register-name" name="nombre" required maxlength="150" autocomplete="name">
+                    <label for="register-email">Correo electrónico</label>
+                    <input id="register-email" name="correo" type="email" placeholder="tu@correo.com" maxlength="254" required autocomplete="email">
+                    <label for="register-role">Soy</label>
+                    <select id="register-role" name="rol" required>
+                        <option value="" selected disabled>Selecciona tu rol</option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="docente">Docente</option>
+                    </select>
+                    <label for="register-password">Contraseña</label>
+                    <input id="register-password" name="password" type="password" required minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="password-help">
+                    <p class="helper" id="password-help">Mínimo 8 caracteres. Máximo 72 bytes.</p>
+                    <div class="privacy-box">
+                        <h3>Aviso de tratamiento de datos</h3>
+                        <p id="privacy"></p>
+                        <label class="checkbox-label" for="privacy-accept">
+                            <input id="privacy-accept" name="acepta_privacidad" type="checkbox" required>
+                            <span>Acepto el tratamiento descrito en el aviso.</span>
+                        </label>
+                    </div>
+                    <button class="primary-button" id="register-submit" type="submit">Crear cuenta</button>
+                </form>
+                <p class="form-footer">¿Ya tienes cuenta? <button class="text-button" id="login-link" type="button">Inicia sesión</button></p>
+            </section>
+        </div>
+
+        <section id="authenticated" aria-labelledby="account-title" hidden>
+            <span class="eyebrow">MI CUENTA</span>
+            <h2 id="account-title">Tu cuenta</h2>
+            <p class="muted">Has ingresado como:</p>
+            <p id="identity" class="identity"></p>
+            <p><a id="dashboard-link" href="#">Ir a mi panel</a></p>
+        </section>
+    </section>
+</main>
+<footer>Plataforma de evaluaciones · Versión inicial</footer>
+</body>
+</html>

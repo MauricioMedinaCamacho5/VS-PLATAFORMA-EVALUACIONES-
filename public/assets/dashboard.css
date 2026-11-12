@@ -1,0 +1,32 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #f3f6fb; color: #172b49; }
+.dashboard { display: flex; min-height: 100vh; }
+.sidebar { flex: 0 0 240px; background: #173c70; color: #fff; padding: 28px 20px; }
+.sidebar-brand { display: block; color: #fff; font-size: 1.3rem; font-weight: 700; text-decoration: none; margin-bottom: 30px; }
+.sidebar-link { display: block; padding: 12px 14px; border-radius: 8px; background: #2b568d; color: #fff; text-decoration: none; }
+.sidebar-link:not(.active) { background: transparent; }
+.dashboard-main { flex: 1; min-width: 0; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 30px; background: #fff; border-bottom: 1px solid #dfe7f1; }
+.topbar strong, .topbar-label { display: block; overflow-wrap: anywhere; }
+.topbar-label { color: #53647a; font-size: .85rem; }
+.content { max-width: 1000px; padding: 36px 30px; }
+.content h1 { font-size: 2rem; }
+.info-card { padding: 24px; margin-top: 24px; border: 1px solid #dfe7f1; border-radius: 12px; background: #fff; }
+.info-card h2 { font-size: 1.3rem; }
+.pending { color: #53647a; margin-bottom: 0; }
+.role-message { margin: 18px 0; padding: 12px 16px; border: 1px solid #aebdd0; border-radius: 8px; background: #eef4fc; }
+.user-card { margin-top: 16px; }
+.user-card p { overflow-wrap: anywhere; }
+.role-form { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.role-form select { min-width: 150px; padding: 8px; border: 1px solid #aebdd0; border-radius: 6px; background: #fff; }
+.pagination-links { display: flex; gap: 18px; margin-top: 20px; }
+.btn-outline-primary { padding: 8px 14px; border: 1px solid #16458a; border-radius: 6px; background: #fff; color: #16458a; cursor: pointer; font: inherit; }
+a:focus-visible, button:focus-visible { outline: 3px solid #bd6300; outline-offset: 3px; }
+@media (max-width: 700px) {
+    .dashboard { flex-direction: column; }
+    .sidebar { flex-basis: auto; padding: 16px 20px; }
+    .sidebar-brand { margin-bottom: 10px; }
+    .sidebar-link { display: inline-block; padding: 8px 12px; }
+    .topbar { padding: 16px 20px; }
+    .content { padding: 26px 20px; }
+}
