@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0F172A">
+    <title>Administración - Evaluaciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../assets/css/estilos.css" rel="stylesheet">
+    <script src="../assets/js/auth-ui.js" defer></script>
+    <script src="../assets/admin-login.js" defer></script>
+</head>
+<body class="auth-admin">
+<main class="auth">
+    <section class="auth-hero" aria-labelledby="hero-title">
+        <span class="auth-brand">
+            <span class="brand-icon" aria-hidden="true"><i class="bi bi-mortarboard-fill"></i></span>
+            <span>Evaluaciones</span>
+        </span>
+        <div>
+            <h1 id="hero-title">Administración de la plataforma.</h1>
+            <p class="lead">Gestiona usuarios y roles desde un acceso reservado para administradores.</p>
+            <ul class="auth-features">
+                <li><i class="bi bi-people" aria-hidden="true"></i>Gestión de usuarios y roles</li>
+                <li><i class="bi bi-shield-lock" aria-hidden="true"></i>Acceso restringido y verificado en cada página</li>
+            </ul>
+        </div>
+        <p class="auth-hero-footer mb-0">Acceso restringido</p>
+    </section>
+
+    <section class="auth-side">
+        <div class="auth-card">
+            <span class="auth-eyebrow"><i class="bi bi-shield-lock-fill me-1" aria-hidden="true"></i>Área de administración</span>
+            <p id="status" class="status" role="status" aria-live="polite">Conectando con el servidor...</p>
+            <noscript><p class="notice">Activa JavaScript para usar esta aplicación.</p></noscript>
+
+            <section id="guest" aria-labelledby="login-title" hidden>
+                <h2 id="login-title">Iniciar sesión</h2>
+                <p class="auth-muted">Solo para cuentas de administrador. Estudiantes y docentes ingresan por la página principal.</p>
+                <form id="login">
+                    <label class="form-label" for="login-email">Correo electrónico</label>
+                    <input class="form-control" id="login-email" name="correo" type="email" maxlength="254" required autocomplete="username">
+                    <label class="form-label" for="login-password">Contraseña</label>
+                    <div class="password-field">
+                        <input class="form-control" id="login-password" name="password" type="password" required autocomplete="current-password">
+                        <button class="toggle-password" type="button" aria-controls="login-password" aria-pressed="false" aria-label="Mostrar contraseña">
+                            <i class="bi bi-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary btn-submit" type="submit"><i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Ingresar al panel</button>
+                </form>
+            </section>
+
+            <section id="other-account" hidden>
+                <h2>Acceso no permitido</h2>
+                <p class="auth-muted">Has iniciado sesión como <strong id="identity"></strong>. Esta área es solo para administradores.</p>
+                <a class="btn btn-primary btn-submit" id="own-panel" href="../index.html">Ir a mi panel</a>
+            </section>
+        </div>
+        <a class="auth-side-footer" href="../index.html"><i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Volver a la página principal</a>
+    </section>
+</main>
+</body>
+</html>

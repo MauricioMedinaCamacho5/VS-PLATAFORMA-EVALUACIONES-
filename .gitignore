@@ -2,3 +2,4 @@
 /config.php
 /.env
 *.log
+/config/config.php

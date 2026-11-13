@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'clases.php';
 
 function iniciarSesion(int $id, int $status): never
 {
@@ -16,6 +17,8 @@ function iniciarSesion(int $id, int $status): never
         destroySession();
         respond(403, ['error' => 'Tu cuenta no tiene un rol válido. Contacta al administrador.']);
     }
+    // Si llegó por un enlace /unirse.php?codigo=... sin sesión, ahora se une a la clase automáticamente.
+    $panel = procesarUnionPendiente(db(), $user) ?? $panel;
     respond($status, ['usuario' => $user, 'csrf' => csrfToken(), 'panel' => $panel]);
 }
 
@@ -27,7 +30,12 @@ try {
         $message = $_SESSION['mensaje_acceso'] ?? null;
         unset($_SESSION['mensaje_acceso']);
         $user = currentUser();
+        $codigoPendiente = codigoUnionPendiente();
+        $clasePendiente = $codigoPendiente !== null ? claseActivaPorCodigo(db(), $codigoPendiente) : null;
         respond(200, [
+            'union_pendiente' => $clasePendiente === null ? null : [
+                'codigo' => $codigoPendiente, 'clase' => $clasePendiente['nombre'], 'docente' => $clasePendiente['docente'],
+            ],
             'csrf' => csrfToken(),
             'usuario' => $user,
             'panel' => $user ? dashboardPath($user['rol']) : null,
@@ -56,14 +64,22 @@ try {
 
     $email = $input['correo'] ?? null;
     $password = $input['password'] ?? null;
-    if (!is_string($email) || strlen($email) > 254 || !filter_var($email, FILTER_VALIDATE_EMAIL)
-        || !is_string($password) || strlen($password) > 72) {
-        respond(422, ['error' => 'Correo o contraseña inválidos.']);
-    }
-    $email = mb_strtolower(trim($email), 'UTF-8');
+    $emailValido = is_string($email) && strlen(trim($email)) <= 254 && filter_var(trim($email), FILTER_VALIDATE_EMAIL);
+    $email = $emailValido ? mb_strtolower(trim($email), 'UTF-8') : '';
 
     if ($action === 'login') {
-        $query = db()->prepare('SELECT id, password_hash, activo FROM usuarios WHERE correo = ?');
+        if (!$emailValido || !is_string($password) || strlen($password) > 72) {
+            respond(422, ['error' => 'Correo o contraseña inválidos.']);
+        }
+        // "publico" = página principal (estudiantes y docentes); "admin" = acceso de administración.
+        $portal = $input['portal'] ?? 'publico';
+        if (!in_array($portal, ['publico', 'admin'], true)) {
+            respond(422, ['error' => 'Acceso no válido.']);
+        }
+        $query = db()->prepare(
+            'SELECT u.id, u.password_hash, u.activo, r.nombre AS rol
+             FROM usuarios u JOIN roles r ON r.id = u.rol_id WHERE u.correo = ?'
+        );
         $query->execute([$email]);
         $user = $query->fetch();
         $dummyHash = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.';
@@ -74,6 +90,13 @@ try {
         if ((int)$user['activo'] !== 1) {
             respond(403, ['error' => 'Tu usuario está desactivado. Contacta al administrador.']);
         }
+        $esAdmin = $user['rol'] === 'administrador';
+        if ($portal === 'admin' && !$esAdmin) {
+            respond(403, ['error' => 'Esta cuenta no tiene acceso de administración. Ingresa por la página principal.']);
+        }
+        if ($portal === 'publico' && $esAdmin) {
+            respond(403, ['error' => 'Las cuentas de administrador ingresan por el acceso de administración.']);
+        }
         iniciarSesion((int)$user['id'], 200);
     }
 
@@ -83,13 +106,33 @@ try {
     if (!is_string($notice) || trim($notice) === '') {
         respond(503, ['error' => 'El registro no está habilitado: falta configurar el aviso de privacidad.']);
     }
-    if (!is_string($name) || trim($name) === ''
-        || mb_strlen(trim($name), 'UTF-8') > 150
-        || mb_strlen($password, 'UTF-8') < 8 || ($input['acepta_privacidad'] ?? false) !== true) {
-        respond(422, ['error' => 'Indica nombre, contraseña de al menos 8 caracteres y acepta el aviso de privacidad.']);
+    // Validación del registro campo por campo: la interfaz muestra cada mensaje bajo su campo.
+    $errores = [];
+    if (!is_string($name) || !mb_check_encoding($name, 'UTF-8') || trim($name) === '') {
+        $errores['nombre'] = 'Escribe tu nombre completo.';
+    } elseif (mb_strlen(trim($name), 'UTF-8') > 150) {
+        $errores['nombre'] = 'El nombre admite como máximo 150 caracteres.';
+    }
+    if (!is_string($input['correo'] ?? null) || trim($input['correo']) === '') {
+        $errores['correo'] = 'Escribe tu correo electrónico.';
+    } elseif (!$emailValido) {
+        $errores['correo'] = 'Escribe un correo válido, por ejemplo nombre@dominio.com.';
     }
     if (!is_string($role) || !in_array($role, ['estudiante', 'docente'], true)) {
-        respond(422, ['error' => 'Selecciona el rol estudiante o docente.']);
+        $errores['rol'] = 'Selecciona si eres estudiante o docente.';
+    }
+    if (!is_string($password) || $password === '') {
+        $errores['password'] = 'Escribe una contraseña.';
+    } elseif (!mb_check_encoding($password, 'UTF-8') || mb_strlen($password, 'UTF-8') < 8) {
+        $errores['password'] = 'La contraseña debe tener al menos 8 caracteres.';
+    } elseif (strlen($password) > 72) {
+        $errores['password'] = 'La contraseña es demasiado larga (máximo 72 bytes).';
+    }
+    if (($input['acepta_privacidad'] ?? false) !== true) {
+        $errores['acepta_privacidad'] = 'Debes aceptar el aviso de tratamiento de datos.';
+    }
+    if ($errores) {
+        respond(422, ['error' => 'Revisa los campos marcados.', 'errores' => $errores]);
     }
     $query = db()->prepare(
         "INSERT INTO usuarios (rol_id, nombre, correo, password_hash, activo, privacidad_aceptada_en, aviso_privacidad)
@@ -99,7 +142,7 @@ try {
         $query->execute([trim($name), $email, password_hash($password, PASSWORD_DEFAULT), $notice, $role]);
     } catch (PDOException $exception) {
         if ($exception->getCode() === '23000' && (int)($exception->errorInfo[1] ?? 0) === 1062) {
-            respond(409, ['error' => 'El correo ya está registrado.']);
+            respond(409, ['error' => 'El correo ya está registrado.', 'errores' => ['correo' => 'Este correo ya está registrado. Inicia sesión o usa otro.']]);
         }
         throw $exception;
     }

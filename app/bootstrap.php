@@ -19,6 +19,13 @@ if (!is_array($config) || !isset($config['db'])) {
     exit(json_encode(['error' => 'La aplicación no está configurada correctamente.']));
 }
 
+// Configuración de la IA (Gemini). Es opcional: sin ella el resto de la plataforma funciona
+// y el módulo de IA muestra un aviso. config/ queda fuera de public/ y no es accesible por web.
+$configIa = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
+if (is_file($configIa)) {
+    require_once $configIa;
+}
+
 ini_set('session.use_strict_mode', '1');
 ini_set('session.use_only_cookies', '1');
 session_set_cookie_params([

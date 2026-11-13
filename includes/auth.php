@@ -17,7 +17,8 @@ function requerirRol(string $rol): array
         $_SESSION['mensaje_acceso'] = $usuario === null
             ? 'Inicia sesión con una cuenta autorizada para acceder.'
             : 'No tienes permiso para acceder a ese panel.';
-        header('Location: ../index.html', true, 303);
+        // El panel de administración vuelve a su propio acceso (admin/index.html).
+        header('Location: ' . ($rol === 'administrador' ? 'index.html' : '../index.html'), true, 303);
         exit;
     }
     return $usuario;

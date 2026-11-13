@@ -13,8 +13,12 @@ evaluaciones/
   app/dashboard.php         Plantilla compartida de los paneles
   includes/auth.php         Control de acceso por rol
   config.example.php        Plantilla de configuración
-  database/evaluaciones.sql  Esquema y cuentas de prueba
+  database/evaluaciones.sql  Esquema y cuentas de prueba (instalación nueva)
+  sql/actualizacion_clases.sql Migración a clases para bases ya existentes
+  includes/clases.php       Clases, códigos de unión e instituciones
+  includes/examen.php       Intentos, autoguardado y calificación en el servidor
   public/
+    unirse.php              Enlace para unirse a una clase (?codigo=AB12CD)
     .htaccess
     index.html              Interfaz HTML de acceso y registro
     index.php               Redirección de compatibilidad a index.html
@@ -31,18 +35,22 @@ La raíz pública es exclusivamente `public/`. La denegación mediante `.htacces
 requiere que Apache tenga habilitado `AllowOverride All`; para mayor seguridad
 se recomienda configurar un VirtualHost cuyo `DocumentRoot` sea esa carpeta.
 Comprueba siempre que Apache rechaza el acceso directo a `app/bootstrap.php`,
-`config.example.php` y `database/evaluaciones.sql` antes de usar el sistema.
+`config.example.php`, `database/evaluaciones.sql` y `sql/actualizacion_clases.sql`
+antes de usar el sistema.
 El directorio `public` habilita expresamente el acceso heredado de la raíz.
 
 ## Instalación inicial en XAMPP
 
-1. Copia el proyecto a `C:\xamppp\htdocs\evaluaciones` (ajusta la ruta si tu
+1. Copia el proyecto a `C:\xampp\htdocs\evaluaciones` (ajusta la ruta si tu
    XAMPP está instalado en otro lugar). Inicia Apache y MySQL desde XAMPP.
+   Requiere PHP 8.1 o superior.
 2. En phpMyAdmin importa `database/evaluaciones.sql` en una instalación vacía.
    El script crea `evaluaciones_db` y sus tablas. No lo importes sobre datos
-   existentes: no es una migración.
+   existentes: no es una migración. Si tu base se creó con una versión anterior
+   (con tablas `grupos`), haz una copia de seguridad y ejecuta en su lugar
+   `sql/actualizacion_clases.sql`, que convierte los grupos en clases.
 3. Copia `config.example.php` a
-   `C:\xamppp\evaluaciones-config\config.php`, **fuera de htdocs**, y ajusta
+   `C:\xampp\evaluaciones-config\config.php`, **fuera de htdocs**, y ajusta
    usuario y contraseña de MySQL. Para otra ubicación define la variable de
    entorno del proceso Apache `EVALUACIONES_CONFIG` con la ruta absoluta.
 4. Define `privacy_notice` con un aviso real aprobado por el responsable del
@@ -110,12 +118,42 @@ requieren un token CSRF válido.
 requiere aprobación. Cualquier visitante puede obtener ese rol; no lo expongas
 a usuarios reales hasta implementar un proceso de validación apropiado.
 
+## Generar preguntas con IA (Google Gemini)
+
+1. **Composer y el lector de PDF.** Instala Composer con el instalador oficial
+   (getcomposer.org → Composer-Setup.exe) y, cuando pregunte por PHP, elige
+   `C:\xampp\php\php.exe`. Luego, en la carpeta del proyecto:
+   `composer install` (instala `smalot/pdfparser` según `composer.lock` en `vendor/`).
+   Sin este paso la plataforma funciona, pero no lee PDF (sí TXT y texto pegado).
+2. **cURL en Apache.** En algunos XAMPP la extensión cURL carga en consola pero
+   no en Apache (en `apache\logs\error.log` aparece «Unable to load dynamic library
+   'curl'»). Solución: en `C:\xampp\apache\conf\extra\httpd-xampp.conf`, antes de
+   `LoadModule php_module`, añade
+   `LoadFile "C:/xampp/php/brotlicommon.dll"` y `LoadFile "C:/xampp/php/brotlidec.dll"`,
+   y reinicia Apache.
+3. **Clave.** Copia `config/config.ejemplo.php` como `config/config.php` (ya está
+   en `.gitignore`) y escribe tu clave gratuita de aistudio.google.com/apikey en
+   `GEMINI_API_KEY`. `GEMINI_MODELO` debe ser un modelo vigente: `gemini-2.0-flash`
+   fue retirado el 1 de junio de 2026.
+
+La clave solo se usa en el servidor (`includes/ia.php`). Las preguntas generadas
+quedan en un borrador de la sesión hasta que el docente las aprueba; solo las
+aprobadas se guardan. El nivel gratuito de Gemini tiene límites por minuto y por
+día, y Google puede usar lo que se le envía para mejorar sus productos: no envíes
+datos personales de estudiantes en los textos.
+
 ## Pendiente
 
+Ya existen clases con código de unión, evaluaciones asignadas a clases, un
+editor básico de preguntas (selección múltiple, verdadero/falso y respuesta corta
+con comparación exacta) y la presentación con temporizador, autoguardado y
+calificación automática en el servidor.
+
 Faltan creación, edición y desactivación de usuarios desde administración,
-gestión de grupos, recuperación con PHPMailer,
-evaluaciones, preguntas y banco, generación y revisión de IA, intentos,
-calificación y resultados, exportación, auditoría operativa y PWA. Los paneles
+recuperación con PHPMailer, edición y reordenamiento de preguntas, banco de
+preguntas, revisión manual de respuestas abiertas, generación y revisión de IA,
+resultados para el docente, exportación, auditoría operativa y PWA. Tampoco hay
+límite de intentos al escribir códigos de clase. Los paneles
 usan Bootstrap 5 desde CDN y cuentan con estilos básicos si no hay conexión.
 Las tablas son una base inicial, no una garantía de que esos flujos funcionen.
 También faltan protección contra fuerza bruta, pruebas integrales, revisión

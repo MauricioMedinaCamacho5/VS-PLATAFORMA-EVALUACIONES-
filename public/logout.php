@@ -13,6 +13,7 @@ if (!is_string($token) || !hash_equals(csrfToken(), $token)) {
     http_response_code(403);
     exit('La sesión del formulario ha vencido. Recarga la página.');
 }
+$eraAdmin = ($_SESSION['rol'] ?? null) === 'administrador';
 destroySession();
-header('Location: index.html?salida=1', true, 303);
+header('Location: ' . ($eraAdmin ? 'admin/index.html' : 'index.html') . '?salida=1', true, 303);
 exit;

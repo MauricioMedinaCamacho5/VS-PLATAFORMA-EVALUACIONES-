@@ -26,22 +26,40 @@ CREATE TABLE usuarios (
     CONSTRAINT fk_usuarios_rol FOREIGN KEY (rol_id) REFERENCES roles (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE grupos (
+CREATE TABLE instituciones (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    docente_id BIGINT UNSIGNED NOT NULL,
     nombre VARCHAR(150) NOT NULL,
+    creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    KEY idx_grupos_docente (docente_id),
-    CONSTRAINT fk_grupos_docente FOREIGN KEY (docente_id) REFERENCES usuarios (id)
+    UNIQUE KEY uq_instituciones_nombre (nombre)
 ) ENGINE=InnoDB;
 
-CREATE TABLE grupo_estudiantes (
-    grupo_id BIGINT UNSIGNED NOT NULL,
+CREATE TABLE clases (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    docente_id BIGINT UNSIGNED NOT NULL,
+    institucion_id BIGINT UNSIGNED NULL,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT NULL,
+    color CHAR(7) CHARACTER SET ascii NOT NULL DEFAULT '#1E3A8A',
+    codigo_union CHAR(6) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    codigo_activo TINYINT(1) NOT NULL DEFAULT 1,
+    creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_clases_codigo (codigo_union),
+    KEY idx_clases_docente (docente_id),
+    KEY idx_clases_institucion (institucion_id),
+    CONSTRAINT fk_clases_docente FOREIGN KEY (docente_id) REFERENCES usuarios (id),
+    CONSTRAINT fk_clases_institucion FOREIGN KEY (institucion_id) REFERENCES instituciones (id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE clase_estudiantes (
+    clase_id BIGINT UNSIGNED NOT NULL,
     estudiante_id BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY (grupo_id, estudiante_id),
-    KEY idx_grupo_estudiante (estudiante_id),
-    CONSTRAINT fk_ge_grupo FOREIGN KEY (grupo_id) REFERENCES grupos (id) ON DELETE CASCADE,
-    CONSTRAINT fk_ge_estudiante FOREIGN KEY (estudiante_id) REFERENCES usuarios (id)
+    unido_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (clase_id, estudiante_id),
+    KEY idx_ce_estudiante (estudiante_id),
+    CONSTRAINT fk_ce_clase FOREIGN KEY (clase_id) REFERENCES clases (id) ON DELETE CASCADE,
+    CONSTRAINT fk_ce_estudiante FOREIGN KEY (estudiante_id) REFERENCES usuarios (id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE evaluaciones (
@@ -65,13 +83,13 @@ CREATE TABLE evaluaciones (
     CONSTRAINT fk_evaluaciones_docente FOREIGN KEY (docente_id) REFERENCES usuarios (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE evaluacion_grupos (
+CREATE TABLE evaluacion_clases (
     evaluacion_id BIGINT UNSIGNED NOT NULL,
-    grupo_id BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY (evaluacion_id, grupo_id),
-    KEY idx_eg_grupo (grupo_id),
-    CONSTRAINT fk_eg_evaluacion FOREIGN KEY (evaluacion_id) REFERENCES evaluaciones (id) ON DELETE CASCADE,
-    CONSTRAINT fk_eg_grupo FOREIGN KEY (grupo_id) REFERENCES grupos (id) ON DELETE CASCADE
+    clase_id BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (evaluacion_id, clase_id),
+    KEY idx_ec_clase (clase_id),
+    CONSTRAINT fk_ec_evaluacion FOREIGN KEY (evaluacion_id) REFERENCES evaluaciones (id) ON DELETE CASCADE,
+    CONSTRAINT fk_ec_clase FOREIGN KEY (clase_id) REFERENCES clases (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE banco_preguntas (
