@@ -42,7 +42,7 @@ $enlacesMenu = match ($usuario['rol']) {
         ['inicio', 'dashboard.php', 'Inicio', 'bi-house-door'],
         ['clases', 'clases.php', 'Mis clases', 'bi-easel'],
         ['evaluaciones', 'evaluaciones.php', 'Mis evaluaciones', 'bi-clipboard-check'],
-        ['resultados', null, 'Mis resultados', 'bi-bar-chart-line'],
+        ['resultados', 'resultados.php', 'Mis resultados', 'bi-bar-chart-line'],
     ],
 };
 $nombresRol = ['administrador' => 'Administrador', 'docente' => 'Docente', 'estudiante' => 'Estudiante'];
@@ -148,6 +148,23 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
                 <h1><?= escapar($titulo) ?></h1>
                 <?php if (!empty($subtitulo)): ?><p class="page-subtitle"><?= escapar($subtitulo) ?></p><?php endif; ?>
             </div>
+
+            <?php if (($_GET['registro'] ?? '') === 'ok'): ?>
+                <div class="registro-confirmacion" role="status" aria-live="polite">
+                    <span class="registro-confirmacion-icono"><i class="bi bi-check-lg" aria-hidden="true"></i></span>
+                    <div>
+                        <h2>¡Cuenta creada correctamente!</h2>
+                        <p>Ya iniciaste sesión y puedes comenzar a usar la plataforma.</p>
+                    </div>
+                </div>
+                <script>
+                    (() => {
+                        const url = new URL(window.location.href);
+                        url.searchParams.delete('registro');
+                        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+                    })();
+                </script>
+            <?php endif; ?>
 
             <?php if (isset($vista)): ?>
                 <?php require $vista; ?>

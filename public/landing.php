@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VS Plataforma de Evaluaciones - SENA</title>
+    <link rel="icon" href="assets/img/logo-claro.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="assets/img/logo-180.png">
     <style>
         :root {
             /* Colors */
@@ -395,17 +398,19 @@
             font-weight: 600;
         }
     </style>
+    <link href="assets/css/estilos.css" rel="stylesheet">
 </head>
-<body>
+<body class="landing-page">
     <!-- Header -->
     <header>
         <div class="header-content">
-            <div class="logo">
-                VS EVALUACIONES
-            </div>
+            <a class="logo" href="landing.php" aria-label="Inicio - VS Evaluaciones">
+                <img src="assets/img/logo-claro.svg" alt="" width="44" height="44">
+                <span>VS EVALUACIONES</span>
+            </a>
             <nav class="nav-buttons">
                 <a href="<?php echo isset($_SESSION['user_id']) ? 'dashboard.php' : 'index.php'; ?>" class="btn btn-login">Ingresar</a>
-                <a href="index.php?registrar=1" class="btn btn-register">Registrarse</a>
+                <a href="index.html?registrar=1" class="btn btn-register">Registrarse</a>
             </nav>
         </div>
     </header>
@@ -422,7 +427,7 @@
                 <button class="btn-hero btn-primary" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
                     Explorar ahora
                 </button>
-                <a href="index.php?registrar=1" class="btn-hero btn-secondary">Registrarse</a>
+                <a href="index.html?registrar=1" class="btn-hero btn-secondary">Registrarse</a>
             </div>
         </div>
 
@@ -494,7 +499,7 @@
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
         renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setClearColor(0xe5e5e5, 1);
+        renderer.setClearColor(0x000000, 0);
         renderer.shadowMap.enabled = true;
         container.appendChild(renderer.domElement);
 
@@ -607,6 +612,32 @@
         cube4.receiveShadow = true;
         scene.add(cube4);
 
+        const logoTexture = new THREE.TextureLoader().load(
+            'assets/img/logo-claro.svg',
+            undefined,
+            undefined,
+            error => console.error('No se pudo cargar el logo en la escena 3D.', error)
+        );
+        logoTexture.encoding = THREE.sRGBEncoding;
+        logoTexture.magFilter = THREE.LinearFilter;
+
+        const logoTile = new THREE.Group();
+        const logoBacking = new THREE.Mesh(
+            new THREE.BoxGeometry(5.2, 5.2, 0.55),
+            new THREE.MeshPhongMaterial({color: 0x6746c5, shininess: 90})
+        );
+        logoBacking.castShadow = true;
+        logoBacking.receiveShadow = true;
+        const logoFace = new THREE.Mesh(
+            new THREE.PlaneGeometry(4.65, 4.65),
+            new THREE.MeshBasicMaterial({map: logoTexture, side: THREE.DoubleSide})
+        );
+        logoFace.position.z = 0.29;
+        logoTile.add(logoBacking, logoFace);
+        logoTile.position.set(13, 9, 1);
+        logoTile.rotation.set(-0.18, -0.36, -0.08);
+        scene.add(logoTile);
+
         // Create torus (ring shape)
         const torusGeometry = new THREE.TorusGeometry(8, 2, 16, 100);
         const torus = new THREE.Mesh(torusGeometry, materials[0]);
@@ -645,7 +676,7 @@
 
         // Animation variables
         let time = 0;
-        const objects = [cube, cube2, cube3, cube4, torus];
+        const objects = [cube, cube2, cube3, cube4, torus, logoTile];
 
         // Animation loop
         function animate() {
@@ -675,6 +706,10 @@
             torus.rotation.y += 0.002;
             torus.scale.x = 1 + Math.sin(time * 1.5) * 0.05;
             torus.scale.y = 1 + Math.cos(time * 1.5) * 0.05;
+
+            logoTile.rotation.y += 0.0025;
+            logoTile.rotation.x = -0.18 + Math.sin(time * 0.5) * 0.04;
+            logoTile.position.y = 9 + Math.sin(time * 0.7) * 0.6;
 
             renderer.render(scene, camera);
         }

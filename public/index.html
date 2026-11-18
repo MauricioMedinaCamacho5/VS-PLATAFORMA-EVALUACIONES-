@@ -20,7 +20,7 @@
 <body>
 <main class="auth">
     <section class="auth-hero" aria-labelledby="welcome-title">
-        <a class="auth-brand" href="index.html" aria-label="Evaluaciones en línea, inicio">
+        <a class="auth-brand" href="landing.php" aria-label="Evaluaciones en línea, inicio">
             <img class="brand-logo" src="assets/img/logo-claro.svg" alt="" width="44" height="44">
             <span>Evaluaciones</span>
         </a>
@@ -95,7 +95,7 @@
                         <p class="helper" id="password-help">Mínimo 8 caracteres. Máximo 72 bytes.</p>
                         <p class="field-error" id="error-password" hidden></p>
 
-                        <div class="privacy-box">
+                        <div class="privacy-box" id="privacy-box">
                             <h3><i class="bi bi-shield-check me-1" aria-hidden="true"></i>Aviso de tratamiento de datos</h3>
                             <p id="privacy"></p>
                             <div class="form-check">
@@ -105,7 +105,7 @@
                             <p class="field-error" id="error-acepta_privacidad" hidden></p>
                         </div>
                         <p class="field-error" id="error-formulario" role="alert" hidden></p>
-                        <button class="btn btn-primary btn-submit" id="register-submit" type="submit"><i class="bi bi-person-plus me-2" aria-hidden="true"></i>Crear cuenta</button>
+                        <button class="btn btn-primary btn-submit" id="register-submit" type="submit" disabled><i class="bi bi-person-plus me-2" aria-hidden="true"></i>Crear cuenta</button>
                     </form>
                     <p class="form-footer">¿Ya tienes cuenta? <button class="text-button" id="login-link" type="button">Inicia sesión</button></p>
                 </section>
@@ -119,6 +119,10 @@
                 <a class="btn btn-primary btn-submit" id="dashboard-link" href="#"><i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>Ir a mi panel</a>
             </section>
         </div>
+        <a class="auth-home" href="landing.php">
+            <i class="bi bi-house-door-fill" aria-hidden="true"></i>
+            <span>INICIO</span>
+        </a>
         <p class="auth-side-footer">Plataforma de evaluaciones · Versión inicial</p>
     </section>
 </main>

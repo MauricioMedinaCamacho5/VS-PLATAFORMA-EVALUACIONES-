@@ -20,7 +20,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'parcial_mensaje.php';
                 <?php if ($restantes > 0): ?>
                     <a class="btn btn-outline-primary" href="presentar.php?id=<?= (int)$intento['evaluacion_id'] ?>"><i class="bi bi-arrow-repeat me-1" aria-hidden="true"></i>Volver a intentarlo</a>
                 <?php endif; ?>
-                <a class="btn btn-primary" href="clases.php"><i class="bi bi-easel me-1" aria-hidden="true"></i>Volver a mis clases</a>
+                <a class="btn btn-primary" href="resultados.php"><i class="bi bi-bar-chart-line me-1" aria-hidden="true"></i>Volver a mis resultados</a>
             </div>
         </section>
     </div>

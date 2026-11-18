@@ -5,13 +5,13 @@ let registrationEnabled = false;
 const status = document.getElementById('status');
 const registerForm = document.getElementById('register');
 const registerSubmit = document.getElementById('register-submit');
+const privacyBox = document.getElementById('privacy-box');
 // Destinos permitidos tras iniciar sesión (estudiante/clases.php: después de unirse con un enlace).
 const panels = new Set(['admin/dashboard.php', 'docente/dashboard.php', 'estudiante/dashboard.php', 'estudiante/clases.php']);
-const REGISTRO_DESHABILITADO = 'El registro aún no está habilitado: el administrador debe configurar el aviso de privacidad.';
 
-function openDashboard(panel) {
+function openDashboard(panel, registroCompletado = false) {
     if (!panels.has(panel)) throw new Error('Tu cuenta no tiene un panel válido. Contacta al administrador.');
-    window.location.replace(panel);
+    window.location.replace(registroCompletado ? `${panel}?registro=ok` : panel);
 }
 
 async function request(action, body) {
@@ -121,6 +121,7 @@ for (const nombre of Object.keys(camposRegistro)) {
 
 registerForm.addEventListener('submit', async event => {
     event.preventDefault();
+    if (!registrationEnabled) return;
     registroIntentado = true;
     status.textContent = '';
     mostrarErrorFormulario('');
@@ -130,17 +131,13 @@ registerForm.addEventListener('submit', async event => {
         camposRegistro[primero]().focus();
         return;
     }
-    if (!registrationEnabled) {
-        mostrarErrorFormulario(REGISTRO_DESHABILITADO);
-        return;
-    }
     const values = Object.fromEntries(new FormData(registerForm));
     values.acepta_privacidad = registerForm.elements.acepta_privacidad.checked;
     registerSubmit.disabled = true;
     try {
         const result = await request('register', values);
         registerForm.reset();
-        openDashboard(result.panel);
+        openDashboard(result.panel, true);
     } catch (error) {
         if (error.errores) {
             for (const [nombre, mensaje] of Object.entries(error.errores)) {
@@ -186,14 +183,20 @@ async function refresh() {
         document.getElementById('dashboard-link').href = data.panel;
     }
     const notice = typeof data.aviso_privacidad === 'string' ? data.aviso_privacidad.trim() : '';
-    document.getElementById('privacy').textContent = notice || REGISTRO_DESHABILITADO;
     registrationEnabled = !!notice;
+    document.getElementById('privacy').textContent = notice;
+    privacyBox.hidden = !registrationEnabled;
+    registerForm.elements.acepta_privacidad.disabled = !registrationEnabled;
+    registerForm.elements.acepta_privacidad.required = registrationEnabled;
+    registerSubmit.disabled = !registrationEnabled;
     if (!data.usuario && data.union_pendiente) {
         const {clase, docente, codigo} = data.union_pendiente;
         return `Inicia sesión o crea tu cuenta de estudiante para unirte a «${clase}» (${docente}, código ${codigo}).`;
     }
     return data.mensaje;
 }
+
+if (new URLSearchParams(window.location.search).get('registrar') === '1') showPanel('register');
 
 for (const [id, panel] of [['show-login', 'login'], ['login-link', 'login'], ['show-register', 'register'], ['register-link', 'register']]) {
     document.getElementById(id).addEventListener('click', () => {

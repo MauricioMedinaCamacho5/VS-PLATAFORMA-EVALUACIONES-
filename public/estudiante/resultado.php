@@ -35,7 +35,7 @@ try {
 $mensaje = tomarMensaje();
 $titulo = 'Resultado';
 $subtitulo = $intento['titulo'] . ' · intento ' . (int)$intento['numero'];
-$seccion = 'evaluaciones';
+$seccion = 'resultados';
 $vista = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'vistas'
     . DIRECTORY_SEPARATOR . 'estudiante_resultado.php';
 require dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'dashboard.php';

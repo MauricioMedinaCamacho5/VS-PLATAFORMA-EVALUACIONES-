@@ -25,6 +25,21 @@ function intentoDelEstudiante(PDO $db, int $intentoId, int $estudianteId, bool $
     return $fila === false ? null : $fila;
 }
 
+/** Resultados calificados que pertenecen al estudiante. */
+function resultadosDelEstudiante(PDO $db, int $estudianteId): array
+{
+    $consulta = $db->prepare(
+        "SELECT i.id, i.numero, i.enviado_en, i.nota, e.titulo, e.nota_minima, u.nombre AS docente
+         FROM intentos i
+         JOIN evaluaciones e ON e.id = i.evaluacion_id
+         JOIN usuarios u ON u.id = e.docente_id
+         WHERE i.estudiante_id = ? AND i.estado = 'calificado' AND i.nota IS NOT NULL
+         ORDER BY i.enviado_en DESC, i.id DESC"
+    );
+    $consulta->execute([$estudianteId]);
+    return $consulta->fetchAll();
+}
+
 /**
  * Inicia un intento nuevo o devuelve el que está en curso.
  * @return array{0: ?int, 1: ?string} [id del intento, mensaje de error]
