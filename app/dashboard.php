@@ -23,7 +23,7 @@ function iniciales(string $nombre): string
 
 $seccion = $seccion ?? (isset($usuarios) ? 'usuarios' : 'inicio');
 
-// [clave, enlace (null = próximamente), texto, ícono de Bootstrap Icons, ícono activo opcional (por defecto «-fill»)]
+// [clave, enlace, texto, ícono de Bootstrap Icons, ícono activo opcional (por defecto «-fill»)]
 $enlacesMenu = match ($usuario['rol']) {
     'administrador' => [
         ['inicio', 'dashboard.php', 'Inicio', 'bi-house-door'],
@@ -35,8 +35,8 @@ $enlacesMenu = match ($usuario['rol']) {
         ['clases', 'clases.php', 'Mis clases', 'bi-easel'],
         ['evaluaciones', 'evaluaciones.php', 'Mis evaluaciones', 'bi-clipboard-check'],
         ['ia', 'ia.php', 'Generar con IA', 'bi-stars', 'bi-stars'],
-        ['banco', null, 'Banco de preguntas', 'bi-file-earmark-text'],
-        ['resultados', null, 'Resultados', 'bi-bar-chart-line'],
+        ['banco', 'banco.php', 'Banco de preguntas', 'bi-file-earmark-text'],
+        ['resultados', 'resultados.php', 'Resultados', 'bi-bar-chart-line'],
     ],
     default => [
         ['inicio', 'dashboard.php', 'Inicio', 'bi-house-door'],
@@ -94,18 +94,10 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
             <span class="menu-titulo">Menú</span>
             <?php foreach ($enlacesMenu as $menuItem): ?>
                 <?php [$menuClave, $menuEnlace, $menuTexto, $menuIcono] = $menuItem; $menuIconoActivo = $menuItem[4] ?? $menuIcono . '-fill'; ?>
-                <?php if ($menuEnlace === null): ?>
-                    <span class="menu-link is-disabled" aria-disabled="true">
-                        <i class="bi <?= escapar($menuIcono) ?>" aria-hidden="true"></i>
-                        <span><?= escapar($menuTexto) ?></span>
-                        <span class="badge-pronto">Pronto</span>
-                    </span>
-                <?php else: ?>
-                    <a class="menu-link<?= $seccion === $menuClave ? ' active' : '' ?>"<?= $seccion === $menuClave ? ' aria-current="page"' : '' ?> href="<?= escapar($menuEnlace) ?>">
-                        <i class="bi <?= escapar($seccion === $menuClave ? $menuIconoActivo : $menuIcono) ?>" aria-hidden="true"></i>
-                        <span><?= escapar($menuTexto) ?></span>
-                    </a>
-                <?php endif; ?>
+                <a class="menu-link<?= $seccion === $menuClave ? ' active' : '' ?>"<?= $seccion === $menuClave ? ' aria-current="page"' : '' ?> href="<?= escapar($menuEnlace) ?>">
+                    <i class="bi <?= escapar($seccion === $menuClave ? $menuIconoActivo : $menuIcono) ?>" aria-hidden="true"></i>
+                    <span><?= escapar($menuTexto) ?></span>
+                </a>
             <?php endforeach; ?>
         </nav>
 

@@ -249,6 +249,7 @@ function esquemaPreguntasIa(): array
     return [
         'type' => 'OBJECT',
         'properties' => [
+            'tema_detectado' => ['type' => 'STRING'],
             'preguntas' => [
                 'type' => 'ARRAY',
                 'items' => [
@@ -266,7 +267,7 @@ function esquemaPreguntasIa(): array
                 ],
             ],
         ],
-        'required' => ['preguntas'],
+        'required' => ['tema_detectado', 'preguntas'],
     ];
 }
 
@@ -294,7 +295,8 @@ function promptPreguntas(array $parametros, array $fuente, array $existentes): s
         '- "retroalimentacion": 1 o 2 frases que expliquen por qué la respuesta es correcta.',
         '- "puntaje": ' . $parametros['puntaje'] . '. "dificultad": "' . $parametros['dificultad'] . '".',
         '- Cada pregunta debe evaluar una idea distinta y entenderse sin ver las demás.',
-        '- Responde SOLO con JSON con la forma {"preguntas": [{"enunciado", "tipo", "opciones", "respuesta_correcta", "puntaje", "retroalimentacion", "dificultad"}]}.',
+        '- Identifica el tema principal del material en "tema_detectado" usando una frase breve; si hay texto base, dedúcelo únicamente de ese texto.',
+        '- Responde SOLO con JSON con la forma {"tema_detectado": "tema principal", "preguntas": [{"enunciado", "tipo", "opciones", "respuesta_correcta", "puntaje", "retroalimentacion", "dificultad"}]}.',
     ];
     if ($existentes) {
         $lineas[] = '- No repitas ni reformules estas preguntas que ya existen:';
@@ -310,6 +312,7 @@ function promptPreguntas(array $parametros, array $fuente, array $existentes): s
     if ($fuente['tipo'] === 'tema') {
         $lineas[] = 'No hay texto base. Usa solo conocimiento ampliamente aceptado y verificable sobre este tema; evita fechas, cifras o nombres de los que no estés seguro.';
         $lineas[] = 'Tema: ' . $fuente['tema'];
+        $lineas[] = 'En "tema_detectado", devuelve el tema indicado de forma breve.';
         $lineas[] = 'Nivel o grado de los estudiantes: ' . ($fuente['nivel'] !== '' ? $fuente['nivel'] : 'no indicado');
         if ($fuente['subtemas'] !== '') {
             $lineas[] = 'Subtemas que deben cubrirse: ' . $fuente['subtemas'];
@@ -437,8 +440,8 @@ function validarPreguntaIa(array $p, float $puntaje, string $dificultad, ?string
     return [$base, null];
 }
 
-/** Extrae el arreglo de preguntas del texto JSON de la IA (tolera bloques ```json). */
-function decodificarPreguntasIa(string $texto): ?array
+/** Decodifica la respuesta JSON de la IA, incluso si viene dentro de un bloque ```json. */
+function decodificarSalidaPreguntasIa(string $texto): ?array
 {
     $texto = trim($texto);
     if (preg_match('/```(?:json)?\s*(.+?)```/s', $texto, $coincidencia) === 1) {
@@ -446,26 +449,39 @@ function decodificarPreguntasIa(string $texto): ?array
     }
     $datos = json_decode($texto, true);
     if (is_array($datos) && array_is_list($datos)) {
-        return $datos;
+        return ['preguntas' => $datos, 'tema_detectado' => ''];
     }
-    return is_array($datos['preguntas'] ?? null) ? $datos['preguntas'] : null;
+    if (!is_array($datos) || !is_array($datos['preguntas'] ?? null)) {
+        return null;
+    }
+    $tema = is_string($datos['tema_detectado'] ?? null)
+        ? mb_substr(trim($datos['tema_detectado']), 0, 200, 'UTF-8') : '';
+    return ['preguntas' => $datos['preguntas'], 'tema_detectado' => $tema];
+}
+
+/** Extrae las preguntas para consumidores que no necesitan el tema detectado. */
+function decodificarPreguntasIa(string $texto): ?array
+{
+    $salida = decodificarSalidaPreguntasIa($texto);
+    return $salida['preguntas'] ?? null;
 }
 
 /**
  * Genera y valida preguntas.
- * @return array{preguntas: array, descartadas: int, error: ?string}
+ * @return array{preguntas: array, tema_detectado: string, descartadas: int, error: ?string}
  */
 function generarPreguntasIa(array $parametros, array $fuente, array $existentes = []): array
 {
     $respuesta = llamarGemini(promptPreguntas($parametros, $fuente, $existentes), esquemaPreguntasIa(), $fuente['tipo'] === 'tema' ? 0.4 : 0.7);
     if (!$respuesta['ok']) {
-        return ['preguntas' => [], 'descartadas' => 0, 'error' => $respuesta['error']];
+        return ['preguntas' => [], 'tema_detectado' => '', 'descartadas' => 0, 'error' => $respuesta['error']];
     }
-    $crudas = decodificarPreguntasIa($respuesta['texto']);
-    if ($crudas === null) {
+    $salida = decodificarSalidaPreguntasIa($respuesta['texto']);
+    if ($salida === null) {
         error_log('Gemini: JSON no válido: ' . mb_substr($respuesta['texto'], 0, 500));
-        return ['preguntas' => [], 'descartadas' => 0, 'error' => 'La respuesta de la IA no tenía el formato esperado. Inténtalo de nuevo.'];
+        return ['preguntas' => [], 'tema_detectado' => '', 'descartadas' => 0, 'error' => 'La respuesta de la IA no tenía el formato esperado. Inténtalo de nuevo.'];
     }
+    $crudas = $salida['preguntas'];
     $yaUsados = array_flip(array_map('textoComparable', $existentes));
     $validas = [];
     $descartadas = 0;
@@ -486,9 +502,9 @@ function generarPreguntasIa(array $parametros, array $fuente, array $existentes 
         $validas[] = $pregunta;
     }
     if (!$validas) {
-        return ['preguntas' => [], 'descartadas' => $descartadas, 'error' => 'La IA no devolvió preguntas válidas. Prueba de nuevo, cambia el tipo o da más contexto.'];
+        return ['preguntas' => [], 'tema_detectado' => $salida['tema_detectado'], 'descartadas' => $descartadas, 'error' => 'La IA no devolvió preguntas válidas. Prueba de nuevo, cambia el tipo o da más contexto.'];
     }
-    return ['preguntas' => $validas, 'descartadas' => $descartadas, 'error' => null];
+    return ['preguntas' => $validas, 'tema_detectado' => $salida['tema_detectado'], 'descartadas' => $descartadas, 'error' => null];
 }
 
 /**

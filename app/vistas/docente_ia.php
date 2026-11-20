@@ -52,6 +52,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'parcial_mensaje.php';
                     <label class="form-label" for="texto">Texto base</label>
                     <textarea class="form-control<?= $invalido('texto') ?>" id="texto" name="texto" rows="12"
                               placeholder="Pega aquí la lectura, apuntes o capítulo del que quieres sacar preguntas."<?= $describe('texto', 'ayuda-texto') ?>><?= escapar($valores['texto']) ?></textarea>
+                    <div class="form-text">No necesitas escribir el tema: la IA lo identificará a partir del texto.</div>
                     <div class="d-flex justify-content-between form-text" id="ayuda-texto">
                         <span>Mínimo 100 caracteres. Si supera <?= number_format(IA_MAX_CARACTERES, 0, ',', '.') ?>, se recorta y te avisamos.</span>
                         <span id="contador-texto" aria-live="polite"></span>
@@ -63,7 +64,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'parcial_mensaje.php';
                     <label class="ia-dropzone<?= isset($errores['archivo']) ? ' is-invalid' : '' ?>" for="archivo">
                         <i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>
                         <strong id="archivo-nombre">Elige un archivo PDF o TXT</strong>
-                        <span class="small text-secondary">Máximo 5 MB. El PDF debe tener texto seleccionable (no escaneado).</span>
+                        <span class="small text-secondary">Máximo 5 MB. No hace falta escribir el tema: la IA lo identificará al leerlo. El PDF debe tener texto seleccionable (no escaneado).</span>
                         <input class="visually-hidden-focusable-input" type="file" id="archivo" name="archivo" accept=".pdf,.txt,application/pdf,text/plain"<?= $describe('archivo') ?>>
                     </label>
                     <?php if (isset($errores['archivo'])): ?><p class="small text-secondary mt-2 mb-0">Por seguridad, vuelve a seleccionar el archivo.</p><?php endif; ?>

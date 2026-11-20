@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// "Generar con IA": formulario con tres fuentes (pegar texto, subir archivo, desde un tema).
+// "Generar con IA": texto y archivos sirven como fuente; el tema se detecta automáticamente.
 // POST accion=generar crea un borrador y abre la revisión; accion=resumen escribe un texto sobre el tema.
 
 require dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'ia.php';
@@ -147,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $borradorId = crearBorradorIa([
                     'evaluacion_id' => $evaluacionId, 'fuente' => $fuente, 'parametros' => $parametros,
+                    'tema_detectado' => $resultado['tema_detectado'],
                     'origen' => $fuente['tipo'] === 'tema' ? 'tema' : ($valores['fuente'] === 'archivo' ? 'archivo' : 'texto'),
                     'sin_texto_base' => $sinTextoBase, 'avisos' => $avisos, 'nuevas' => $resultado['preguntas'],
                     'generadas' => count($resultado['preguntas']),

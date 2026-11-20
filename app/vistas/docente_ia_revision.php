@@ -12,6 +12,12 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'parcial_mensaje.php';
 <?php foreach ($borrador['avisos'] as $aviso): ?>
     <div class="alert alert-info d-flex gap-2 py-2" role="status"><i class="bi bi-info-circle-fill mt-1" aria-hidden="true"></i><span><?= escapar($aviso) ?></span></div>
 <?php endforeach; ?>
+<?php if (!empty($borrador['tema_detectado'])): ?>
+    <div class="alert alert-info d-flex gap-2 py-2" role="status">
+        <i class="bi bi-lightbulb-fill mt-1" aria-hidden="true"></i>
+        <span><strong>Tema identificado por la IA:</strong> <?= escapar($borrador['tema_detectado']) ?>. Comprueba que corresponda al material antes de aprobar las preguntas.</span>
+    </div>
+<?php endif; ?>
 <?php if ($borrador['sin_texto_base']): ?>
     <div class="ia-aviso-tema mb-3" role="note">
         <i class="bi bi-exclamation-triangle-fill me-1" aria-hidden="true"></i>

@@ -121,6 +121,9 @@ try {
             if ($resultado['error'] !== null) {
                 redirigirConMensaje($volver, $resultado['error'], 'danger');
             }
+            if (($borrador['tema_detectado'] ?? '') === '' && $resultado['tema_detectado'] !== '') {
+                $_SESSION['ia_borradores'][$borradorId]['tema_detectado'] = $resultado['tema_detectado'];
+            }
             agregarPreguntasBorrador($borradorId, $resultado['preguntas']);
             $_SESSION['ia_borradores'][$borradorId]['generadas'] += count($resultado['preguntas']);
             registrarAuditoria($db, $docenteId, (int)$borrador['evaluacion_id'], 'ia_generar_mas', [

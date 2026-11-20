@@ -136,11 +136,14 @@ a usuarios reales hasta implementar un proceso de validación apropiado.
    `GEMINI_API_KEY`. `GEMINI_MODELO` debe ser un modelo vigente: `gemini-2.0-flash`
    fue retirado el 1 de junio de 2026.
 
-La clave solo se usa en el servidor (`includes/ia.php`). Las preguntas generadas
-quedan en un borrador de la sesión hasta que el docente las aprueba; solo las
-aprobadas se guardan. El nivel gratuito de Gemini tiene límites por minuto y por
-día, y Google puede usar lo que se le envía para mejorar sus productos: no envíes
-datos personales de estudiantes en los textos.
+La clave solo se usa en el servidor (`includes/ia.php`). Al pegar texto o subir
+un PDF/TXT, no hace falta escribir el tema: Gemini lo identifica desde el
+material y lo muestra en la pantalla de revisión para que el docente lo
+confirme. Las preguntas generadas quedan en un borrador de la sesión hasta que
+el docente las aprueba; solo las aprobadas se guardan. El nivel gratuito de
+Gemini tiene límites por minuto y por día, y Google puede usar lo que se le envía
+para mejorar sus productos: no envíes datos personales de estudiantes en los
+textos.
 
 ## Pendiente
 
@@ -149,10 +152,14 @@ editor básico de preguntas (selección múltiple, verdadero/falso y respuesta c
 con comparación exacta) y la presentación con temporizador, autoguardado y
 calificación automática en el servidor.
 
-Faltan creación, edición y desactivación de usuarios desde administración,
-recuperación con PHPMailer, edición y reordenamiento de preguntas, banco de
-preguntas, revisión manual de respuestas abiertas, generación y revisión de IA,
-resultados para el docente, exportación, auditoría operativa y PWA. Tampoco hay
+El docente ya puede guardar preguntas de selección múltiple, verdadero/falso y
+respuesta corta en su banco privado, eliminarlas y agregarlas a sus evaluaciones
+que todavía no tienen intentos. El panel de resultados permite filtrar por
+evaluación, consultar promedios y revisar las respuestas y calificaciones de
+cada intento calificado; solo muestra evaluaciones propias. Aún faltan creación,
+edición y desactivación de usuarios desde administración, recuperación con
+PHPMailer, edición y reordenamiento de preguntas, revisión manual de respuestas
+abiertas, revisión de IA, exportación, auditoría operativa y PWA. Tampoco hay
 límite de intentos al escribir códigos de clase. Los paneles
 usan Bootstrap 5 desde CDN y cuentan con estilos básicos si no hay conexión.
 Las tablas son una base inicial, no una garantía de que esos flujos funcionen.
