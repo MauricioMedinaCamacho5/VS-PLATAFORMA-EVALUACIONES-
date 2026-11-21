@@ -1,6 +1,6 @@
 'use strict';
 
-// Editor de preguntas: muestra solo los campos del tipo elegido y confirma antes de eliminar.
+// Editor de preguntas: muestra solo los campos del tipo elegido.
 (() => {
     const tipo = document.getElementById('tipo');
     const secciones = document.querySelectorAll('.seccion-tipo');
@@ -15,10 +15,5 @@
     if (tipo) {
         tipo.addEventListener('change', actualizar);
         actualizar();
-    }
-    for (const formulario of document.querySelectorAll('form[data-confirmar]')) {
-        formulario.addEventListener('submit', event => {
-            if (!window.confirm(formulario.dataset.confirmar)) event.preventDefault();
-        });
     }
 })();

@@ -66,6 +66,16 @@ El directorio `public` habilita expresamente el acceso heredado de la raíz.
    VirtualHost. No abras el HTML con doble clic (`file://`): la página necesita
    Apache y PHP para comunicarse con MySQL.
 
+### Iniciar desde VS Code y abrir en Chrome
+
+Con MySQL iniciado en XAMPP, abre la paleta de comandos de VS Code
+(`Ctrl+Shift+P`), ejecuta **Tasks: Run Task** y selecciona
+**Iniciar proyecto y abrir en Chrome**. La tarea inicia el servidor PHP local
+en `http://127.0.0.1:8000/` y abre Chrome cuando ya está listo. Para detenerlo,
+termina la tarea desde el terminal de VS Code (`Ctrl+C`). El servidor escucha
+solo en el equipo local; si el puerto 8000 ya está ocupado, detén el otro
+servidor antes de volver a iniciarlo.
+
 El SQL crea un administrador, dos docentes y cinco estudiantes con direcciones
 `admin@example.test`, `docente1@example.test`, `docente2@example.test` y
 `estudiante1@example.test` a `estudiante5@example.test`. Todos usan la

@@ -111,6 +111,36 @@ h1, h2, h3, h4 { color: var(--texto); font-weight: 600; }
 /* ---- Alertas ---- */
 .alert { border-radius: 12px; border-width: 1px; }
 
+/* ---- Confirmaciones ---- */
+.confirmacion {
+    width: min(440px, calc(100% - 32px));
+    max-width: none;
+    padding: 32px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--blanco);
+    color: var(--texto);
+    box-shadow: 0 24px 80px rgba(9, 7, 14, .25);
+}
+.confirmacion::backdrop { background: rgba(15, 12, 24, .6); }
+.confirmacion-icono {
+    display: grid; place-items: center;
+    width: 52px; height: 52px; margin-bottom: 20px;
+    border-radius: 16px; background: var(--azul-suave);
+    color: var(--azul-medio); font-size: 1.6rem; font-weight: 700;
+}
+.confirmacion h2 { margin: 0 0 10px; font-size: 1.3rem; }
+.confirmacion p { margin: 0; color: var(--texto-suave); line-height: 1.6; overflow-wrap: anywhere; }
+.confirmacion-acciones { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.confirmacion-acciones button {
+    padding: 11px 18px; border: 1px solid var(--borde);
+    border-radius: var(--radio-sm); font: inherit; font-weight: 600; cursor: pointer;
+}
+.confirmacion-cancelar { background: var(--blanco); color: var(--texto); }
+.confirmacion-cancelar:hover { background: var(--fondo); }
+.confirmacion-aceptar { background: var(--azul); border-color: var(--azul) !important; color: var(--blanco); }
+.confirmacion-aceptar:hover { background: var(--azul-medio); }
+
 /* =========================================================================
    Estructura de los paneles
    ========================================================================= */

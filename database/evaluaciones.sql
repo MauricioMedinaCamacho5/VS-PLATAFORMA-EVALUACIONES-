@@ -19,6 +19,7 @@ CREATE TABLE usuarios (
     activo TINYINT(1) NOT NULL DEFAULT 1,
     privacidad_aceptada_en DATETIME NULL,
     aviso_privacidad TEXT NULL,
+    foto_perfil VARCHAR(255) NULL,
     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_usuarios_correo (correo),

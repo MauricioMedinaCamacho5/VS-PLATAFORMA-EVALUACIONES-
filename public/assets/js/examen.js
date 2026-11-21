@@ -102,14 +102,17 @@
 
     form.addEventListener('change', () => { cambiosSinGuardar = true; actualizarProgreso(); });
     form.addEventListener('input', () => { cambiosSinGuardar = true; actualizarProgreso(); });
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
         event.preventDefault();
         const respondidas = Number(contador.textContent);
         const pendientes = total - respondidas;
         const pregunta = pendientes > 0
             ? `Tienes ${pendientes} pregunta${pendientes === 1 ? '' : 's'} sin responder. ¿Enviar de todas formas?`
             : '¿Enviar la evaluación? Ya no podrás cambiar tus respuestas.';
-        if (window.confirm(pregunta)) enviar(false);
+        if (await window.confirmarAccion(pregunta, {
+            titulo: 'Enviar evaluación',
+            aceptar: 'Enviar evaluación',
+        })) enviar(false);
     });
     window.addEventListener('beforeunload', avisarSalida);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guardar(); });

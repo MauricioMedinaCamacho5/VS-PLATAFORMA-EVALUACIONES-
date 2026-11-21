@@ -1,6 +1,6 @@
 'use strict';
 
-// Copiar código/enlace de una clase y confirmar acciones delicadas (formularios con data-confirmar).
+// Copiar código/enlace de una clase.
 (() => {
     const aviso = document.getElementById('copiado-aviso');
 
@@ -37,9 +37,4 @@
         });
     }
 
-    for (const formulario of document.querySelectorAll('form[data-confirmar]')) {
-        formulario.addEventListener('submit', event => {
-            if (!window.confirm(formulario.dataset.confirmar)) event.preventDefault();
-        });
-    }
 })();

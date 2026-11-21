@@ -1,7 +1,7 @@
 'use strict';
 
 // Módulo de IA: pestañas de fuente, contador de texto, nombre del archivo,
-// confirmaciones y animación de carga mientras la IA trabaja.
+// y animación de carga mientras la IA trabaja.
 (() => {
     const MAX_CARACTERES = 20000;
 
@@ -61,16 +61,12 @@
         });
     }
 
-    // ---- Confirmaciones y animación de carga ----
+    // ---- Animación de carga ----
     const capa = document.getElementById('ia-carga');
     const mensaje = document.getElementById('ia-carga-mensaje');
     for (const formulario of document.querySelectorAll('form')) {
         formulario.addEventListener('submit', event => {
             const boton = event.submitter;
-            if (boton?.dataset.confirmar && !window.confirm(boton.dataset.confirmar)) {
-                event.preventDefault();
-                return;
-            }
             if (!boton?.dataset.carga || !capa) return;
             if (formulario.dataset.enviando === '1') {
                 event.preventDefault();
