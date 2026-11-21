@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VS Plataforma de Evaluaciones - SENA</title>
-    <link rel="icon" href="assets/img/logo-claro.svg" type="image/svg+xml">
+    <title>Plataforma de Evaluaciones - SENA</title>
+    <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
     <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/logo-180.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         :root {
             /* Colors */
@@ -404,14 +408,10 @@
     <!-- Header -->
     <header>
         <div class="header-content">
-            <a class="logo" href="landing.php" aria-label="Inicio - VS Evaluaciones">
+            <a class="logo" href="index.php" aria-label="Inicio - Plataforma de Evaluaciones">
                 <img src="assets/img/logo-claro.svg" alt="" width="44" height="44">
-                <span>VS EVALUACIONES</span>
+                <span>Plataforma de Evaluaciones</span>
             </a>
-            <nav class="nav-buttons">
-                <a href="<?php echo isset($_SESSION['user_id']) ? 'dashboard.php' : 'index.php'; ?>" class="btn btn-login">Ingresar</a>
-                <a href="index.html?registrar=1" class="btn btn-register">Registrarse</a>
-            </nav>
         </div>
     </header>
 
@@ -420,65 +420,126 @@
         <div id="canvas-container"></div>
 
         <div class="hero-content">
-            <div class="mint-tag">PLATAFORMA INTELIGENTE</div>
-            <h1>EVALUACIONES TRANSFORMADAS</h1>
-            <p>Diseñada para modernizar cómo docentes y estudiantes interactúan con la evaluación del conocimiento. Tecnología, diseño y precisión en un solo lugar.</p>
+            <h1>Crea evaluaciones. Comparte. Revisa resultados.</h1>
+            <p>Organiza tus clases, comparte evaluaciones con tus estudiantes y consulta sus resultados desde una sola plataforma.</p>
             <div class="hero-buttons">
-                <button class="btn-hero btn-primary" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
-                    Explorar ahora
-                </button>
-                <a href="index.html?registrar=1" class="btn-hero btn-secondary">Registrarse</a>
+                <a href="login.html" class="btn-hero btn-primary">Ingresar</a>
+                <a href="login.html?registrar=1" class="btn-hero btn-secondary">Crear cuenta</a>
             </div>
         </div>
+    </section>
 
-        <div class="scroll-indicator">
-            <svg viewBox="0 0 24 24" fill="none">
-                <path d="M12 2v16M19 19l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+    <section class="showcase" aria-labelledby="showcase-title">
+        <div class="showcase-copy">
+            <span class="showcase-eyebrow">ASÍ SE USA</span>
+            <h2 id="showcase-title">Del diseño de la evaluación a sus resultados.</h2>
+            <p>Un flujo sencillo para que docentes organicen sus clases y estudiantes encuentren lo que deben presentar.</p>
+            <ol class="showcase-steps">
+                <li>
+                    <span class="step-number">01</span>
+                    <div><strong>Crea</strong><p>Diseña una evaluación o prepara preguntas con ayuda de IA.</p></div>
+                </li>
+                <li>
+                    <span class="step-number">02</span>
+                    <div><strong>Comparte</strong><p>Organiza una clase y permite que tus estudiantes se unan con un código.</p></div>
+                </li>
+                <li>
+                    <span class="step-number">03</span>
+                    <div><strong>Revisa</strong><p>Consulta intentos, calificaciones y respuestas desde el panel.</p></div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="platform-preview">
+            <p class="preview-caption">Vista ilustrativa del panel docente · Sin datos reales</p>
+            <div class="preview-window" aria-hidden="true">
+                <div class="preview-topbar">
+                    <span class="preview-dots"><i></i><i></i><i></i></span>
+                    <span>Plataforma de Evaluaciones</span>
+                </div>
+                <div class="preview-layout">
+                    <aside class="preview-sidebar">
+                        <strong><span class="preview-mark">P</span>Evaluaciones</strong>
+                        <span class="preview-nav-item active">Inicio</span>
+                        <span class="preview-nav-item">Mis clases</span>
+                        <span class="preview-nav-item">Mis evaluaciones</span>
+                        <span class="preview-nav-item">Generar con IA</span>
+                        <span class="preview-nav-item">Resultados</span>
+                    </aside>
+                    <div class="preview-content">
+                        <div class="preview-heading">
+                            <div><span>Panel docente</span><strong>Acciones rápidas</strong></div>
+                            <span class="preview-avatar">D</span>
+                        </div>
+                        <div class="preview-actions">
+                            <div><span class="preview-action-icon">+</span><strong>Nueva evaluación</strong><small>Crear un borrador</small></div>
+                            <div><span class="preview-action-icon">▦</span><strong>Nueva clase</strong><small>Compartir un código</small></div>
+                            <div><span class="preview-action-icon">✦</span><strong>Generar con IA</strong><small>Preparar preguntas</small></div>
+                        </div>
+                        <div class="preview-recent">
+                            <strong>Evaluaciones recientes</strong>
+                            <div><span>Evaluación de ejemplo</span><span class="preview-status">Borrador</span></div>
+                            <div><span>Cuestionario de ejemplo</span><span class="preview-status is-published">Publicada</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features" id="features">
-        <h2>CARACTERÍSTICAS PRINCIPALES</h2>
+        <h2>Herramientas para cada etapa</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🎯</div>
                 <h3>Evaluaciones Precisas</h3>
-                <p>Crea evaluaciones personalizadas con preguntas de múltiple opción, respuesta corta y análisis detallados de desempeño estudiantil.</p>
+                <p>Combina preguntas de selección múltiple, verdadero o falso y respuesta corta; configura tiempos e intentos.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🤖</div>
-                <h3>Inteligencia Artificial</h3>
-                <p>Revisión automática de respuestas con IA para retroalimentación inmediata, detallada y personalizada para cada estudiante.</p>
+                <h3>Preguntas con IA</h3>
+                <p>Genera borradores desde un tema, un texto o un documento y revisa las preguntas antes de guardarlas.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Análisis Avanzados</h3>
-                <p>Tableros de control con métricas en tiempo real, reportes detallados y visualización de desempeño académico completo.</p>
+                <h3>Resultados claros</h3>
+                <p>Consulta calificaciones, intentos y respuestas de tus evaluaciones desde el panel de resultados.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">👥</div>
-                <h3>Gestión Intuitiva</h3>
-                <p>Sistema flexible para administrar docentes, estudiantes y clases de forma intuitiva y eficiente sin necesidad de capacitación.</p>
+                <h3>Clases organizadas</h3>
+                <p>Crea clases y comparte un código para que tus estudiantes puedan unirse.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔒</div>
-                <h3>Seguridad Garantizada</h3>
-                <p>Protección de datos con encriptación de nivel empresarial y autenticación segura para todos tus datos y evaluaciones.</p>
+                <h3>Acceso por perfiles</h3>
+                <p>Docentes, estudiantes y administradores cuentan con paneles y permisos según su rol.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
-                <h3>Rendimiento Óptimo</h3>
-                <p>Plataforma ultra rápida optimizada para usuarios simultáneos con disponibilidad 24/7 y soporte técnico permanente.</p>
+                <h3>Presentación guiada</h3>
+                <p>Los exámenes incluyen temporizador y guardado automático de las respuestas.</p>
             </div>
+        </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-cta-title">
+        <div>
+            <span class="showcase-eyebrow">EMPIEZA AQUÍ</span>
+            <h2 id="final-cta-title">Tu próxima evaluación empieza en un solo lugar.</h2>
+            <p>Ingresa a tu cuenta o crea una para comenzar.</p>
+        </div>
+        <div class="final-cta-actions">
+            <a href="login.html" class="btn-hero btn-primary">Ingresar</a>
+            <a href="login.html?registrar=1" class="btn-hero btn-secondary">Crear cuenta</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>&copy; 2024 VS PLATAFORMA DE EVALUACIONES</p>
+            <p>&copy; VS PLATAFORMA DE EVALUACIONES</p>
             <p>Servicio Nacional de Aprendizaje — SENA</p>
         </div>
     </footer>

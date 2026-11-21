@@ -1,47 +1,46 @@
-# 🎨 VS Plataforma - Landing Page Guide
+# 🎨 VS Plataforma - Página principal
 
 ## 📋 Descripción General
 
-He creado un **landing page profesional y moderno** siguiendo la guía de diseño **brutalist editorial** que compartiste. La página incluye:
+La página principal usa una identidad visual oscura y moderna, con la marca centrada en el encabezado y los accesos principales en el centro del hero.
 
 ### ✨ Características Principales:
 
-1. **Three.js Hero Section** 
+1. **Hero principal**
+   - Presenta el flujo de crear evaluaciones, compartirlas y consultar resultados
+   - Botones centrados de ingreso y creación de cuenta
+   - Fondo oscuro con acentos violetas y turquesa
+
+2. **Presentación del producto**
+   - Explica el flujo en tres pasos: crear, compartir y revisar
+   - Incluye una vista ilustrativa del panel docente, marcada como ejemplo y sin datos reales
+   - Resume las funciones disponibles y repite los accesos al final de la página
+
+3. **Three.js**
    - Objetos 3D animados (cubos texturizados, torus ring)
    - Texturas de hormigón, madera y acentos mint
    - Iluminación dinámica con sombras
    - Interactividad con el mouse (rotación de cámara)
    - Animación fluida y performance optimizado
 
-2. **Diseño Brutalist Editorial**
-   - Paleta de colores: Blanco, gris cálido, negro
-   - Acentos mínimos en mint (#d1ffca)
-   - Tipografía masiva (130px para display)
-   - Sin gradientes, sin sombras innecesarias
-   - Espaciado generoso
-
-3. **Layout Split Hero**
-   - 50% contenido de texto (izquierda)
-   - 50% Three.js 3D scene (derecha)
-   - Completamente responsive
-
 4. **Secciones**
-   - Header fijo con navegación en pill shape
-   - Hero section con CTA buttons
-   - Features grid (6 tarjetas)
-   - Footer dark (inverted)
+   - Encabezado blanco con logo y nombre de la plataforma
+   - Hero centrado con los accesos en la parte inferior
+   - Flujo de uso, vista del panel y seis tarjetas de funciones
+   - CTA final y footer oscuro
+   - Diseño responsive
 
 ---
 
 ## 🚀 Cómo Usar
 
-### Acceso a la página:
+### Acceso a la página principal:
 ```
-http://localhost/VS-PLATAFORMA-EVALUACIONES-/public/landing.php
+http://localhost/VS-PLATAFORMA-EVALUACIONES-/public/
 ```
 
-### O reemplaza tu index.html con este landing:
-Renombra o copia el archivo a la raíz de `/public/`
+El inicio de sesión y el registro están disponibles desde los botones de la
+página principal o directamente en `login.html`.
 
 ---
 
@@ -140,10 +139,9 @@ const texture = textureLoader.load('path/to/image.jpg');
 ## 🎬 Next Steps
 
 1. ✅ **Landing page creada**
-2. 📍 Integrar con tu sistema de autenticación
-3. 🎨 Personalizar colores/contenido
-4. 📊 Agregar más secciones (testimonios, pricing, etc)
-5. 🔗 Conectar con rutas de login/registro
+2. ✅ **Accesos conectados** a `login.html` y `login.html?registrar=1`
+3. 🎨 Personalizar colores y contenido cuando cambien las funciones disponibles
+4. 📊 Agregar testimonios u otras secciones solo cuando haya contenido real para mostrar
 
 ---
 

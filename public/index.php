@@ -1,5 +1,4 @@
 <?php
 declare(strict_types=1);
 
-header('Location: index.html', true, 302);
-exit;
+require __DIR__ . DIRECTORY_SEPARATOR . 'landing.php';

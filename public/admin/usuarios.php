@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($actor->fetch() === false) {
             $conexion->rollBack();
             $_SESSION['mensaje_acceso'] = 'Ya no tienes permiso para administrar roles.';
-            header('Location: ../index.html', true, 303);
+            header('Location: ../login.html', true, 303);
             exit;
         }
         $consulta = $conexion->prepare(
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($id === (int)$usuario['id'] && $rol !== 'administrador' && $mensaje === 'Rol actualizado correctamente.') {
         $_SESSION['mensaje_acceso'] = 'Tu rol cambió. Entra a tu nuevo panel.';
-        header('Location: ../index.html', true, 303);
+        header('Location: ../login.html', true, 303);
         exit;
     }
     $_SESSION['mensaje_roles'] = $mensaje;

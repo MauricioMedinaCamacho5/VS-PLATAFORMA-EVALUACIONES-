@@ -20,8 +20,10 @@ evaluaciones/
   public/
     unirse.php              Enlace para unirse a una clase (?codigo=AB12CD)
     .htaccess
-    index.html              Interfaz HTML de acceso y registro
-    index.php               Redirección de compatibilidad a index.html
+    index.php               Página principal pública
+    index.html              Redirección de compatibilidad a index.php
+    landing.php             Portada visual principal
+    login.html              Interfaz de acceso y registro
     api/index.php           API JSON de sesión y autenticación
     admin/dashboard.php     Panel del administrador
     admin/usuarios.php      Consulta y cambio de roles
@@ -57,7 +59,9 @@ El directorio `public` habilita expresamente el acceso heredado de la raíz.
    tratamiento. Si está vacío, el registro permanece deshabilitado. La
    aplicación registra el texto aceptado y la fecha; esto no acredita por sí
    solo el cumplimiento de la Ley 1581 de 2012.
-5. Abre `http://localhost/evaluaciones/public/index.html`. Si utilizas un
+5. Abre `http://localhost/evaluaciones/public/` para entrar a la página
+   principal, o `http://localhost/evaluaciones/public/login.html` para acceder
+   directamente al inicio de sesión. Si utilizas un
    VirtualHost con `public/` como raíz, abre la dirección configurada para ese
    VirtualHost. No abras el HTML con doble clic (`file://`): la página necesita
    Apache y PHP para comunicarse con MySQL.
@@ -74,7 +78,7 @@ representan una aceptación real del aviso.
 - Inicia sesión con cada una de las cuentas de prueba y verifica que se abre
   el panel del rol correspondiente y muestra su nombre. Cierra la sesión.
   Las credenciales incorrectas y cuentas desactivadas deben rechazarse.
-- Con sesión iniciada, abre `index.html` y verifica la redirección al panel.
+- Con sesión iniciada, abre `login.html` y verifica la redirección al panel.
   Intenta abrir el panel de otro rol: debe mostrar un mensaje de acceso
   denegado y un enlace al panel correcto. Sin sesión debe pedir iniciar sesión.
 - Con un aviso configurado, registra por separado un estudiante y un docente

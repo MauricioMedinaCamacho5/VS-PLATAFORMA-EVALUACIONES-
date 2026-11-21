@@ -1,21 +1,26 @@
-# ✨ PROYECTO COMPLETADO: Landing Page Three.js Brutalist
+# ✨ Página principal: VS Plataforma de Evaluaciones
 
 ## 📊 Resumen Ejecutivo
 
-Se ha creado un **landing page profesional y de alto impacto** para la plataforma VS Evaluaciones utilizando **Three.js** y diseño **brutalist editorial**.
+La portada usa una identidad visual oscura y moderna, con marca centrada y accesos de cuenta ubicados en el centro del hero.
 
 ---
 
 ## 🎯 Qué se Entregó
 
-### 1. **Landing Page Completo** (`landing.php`)
-   - ✅ Hero section 50/50 (contenido + Three.js)
-   - ✅ Header con navegación en pill shape
-   - ✅ Feature cards con diseño top-arc rounded
-   - ✅ Footer invertido (dark mode)
+### 1. Página principal (`public/index.php`)
+   - ✅ Hero que presenta el flujo de crear, compartir y revisar evaluaciones
+   - ✅ Logo y nombre de la plataforma en el encabezado
+   - ✅ Botones centrales para ingresar y crear cuenta
    - ✅ Completamente responsive
 
-### 2. **Three.js Scene Avanzado**
+### 2. **Flujo de uso y vista ilustrativa**
+   - ✅ Explicación en tres pasos: crear, compartir y revisar
+   - ✅ Vista de ejemplo del panel docente, marcada como ilustrativa y sin datos reales
+   - ✅ Seis tarjetas que describen funciones disponibles
+   - ✅ Llamado final a ingresar o crear cuenta
+
+### 3. **Three.js Scene**
    - ✅ 4 cubos texturizados animados
    - ✅ 1 torus ring con rotación
    - ✅ Texturas procedurales (concreto, madera)
@@ -24,14 +29,13 @@ Se ha creado un **landing page profesional y de alto impacto** para la plataform
    - ✅ Interactividad con mouse
    - ✅ Animaciones fluidas
 
-### 3. **Diseño Brutalist Editorial**
-   - ✅ Paleta: Negro, Blanco, Gris cálido
-   - ✅ Acentos mínimos en mint (#d1ffca)
-   - ✅ Tipografía masiva y comprimida
-   - ✅ Sin gradientes, sin sombras innecesarias
-   - ✅ Espaciado generoso (sistema de 8px)
+### 4. **Diseño**
+   - ✅ Hero oscuro y secciones claras para separar el contenido
+   - ✅ Acentos violetas y turquesa, con tarjetas de bordes redondeados
+   - ✅ Sombras sutiles en la vista ilustrativa y CTA final
+   - ✅ Diseño responsive para escritorio y móvil
 
-### 4. **Documentación**
+### 5. **Documentación**
    - ✅ Guía de uso y customización (`LANDING_PAGE_GUIDE.md`)
    - ✅ Descripción técnica del Three.js
    - ✅ Ejemplos de personalización
@@ -76,18 +80,19 @@ Performance:
 ### Hero Section Dinámico:
 ```
 ┌─────────────────────────────────────────┐
-│ HEADER FIXED                    [LOGIN] │
+│ LOGO Y NOMBRE DE LA PLATAFORMA          │
 ├─────────────────────────────────────────┤
 │                                         │
-│  CONTENIDO (50%)  │  THREE.JS (50%)    │
+│  HERO: crear, compartir y revisar       │
 │                   │                     │
-│  • Mint Tag       │  ┌───────┐         │
-│  • H1 Masivo      │  │ CUBES │ Animated
-│  • Descripción    │  │ TORUS │ & Lit
-│  • 2 Buttons      │  └───────┘         │
+│  • Hero oscuro con acentos de color    │
+│  • Flujo de uso y panel ilustrativo     │
+│  • Acceso y registro visibles           │
 │                   │                     │
 ├─────────────────────────────────────────┤
 │           FEATURES GRID (6 Cards)       │
+├─────────────────────────────────────────┤
+│           CTA DE ACCESO Y REGISTRO      │
 ├─────────────────────────────────────────┤
 │  FOOTER DARK                            │
 └─────────────────────────────────────────┘
@@ -107,7 +112,9 @@ Performance:
 VS-PLATAFORMA-EVALUACIONES-/
 │
 ├── public/
-│   └── landing.php          ← NUEVA: Landing page con Three.js
+│   ├── index.php            ← Página principal de entrada
+│   ├── landing.php          ← Diseño de portada con Three.js
+│   └── login.html           ← Inicio de sesión y registro
 │
 └── LANDING_PAGE_GUIDE.md    ← NUEVA: Documentación técnica
 ```
@@ -118,13 +125,10 @@ VS-PLATAFORMA-EVALUACIONES-/
 
 ### URL de Prueba:
 ```
-http://localhost/VS-PLATAFORMA-EVALUACIONES-/public/landing.php
+http://localhost/VS-PLATAFORMA-EVALUACIONES-/public/
 ```
 
-### Alternativas de Integración:
-1. Renombrar como `index.php` en `/public/`
-2. Crear route/link en tu homepage
-3. Usar como preview en admin panel
+El acceso y el registro están disponibles en `public/login.html`.
 
 ---
 

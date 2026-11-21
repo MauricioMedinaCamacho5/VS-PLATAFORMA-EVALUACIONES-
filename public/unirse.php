@@ -22,7 +22,7 @@ if ($usuario === null) {
     if ($codigo !== null) {
         guardarUnionPendiente($codigo);
     }
-    header('Location: index.html?unirse=1', true, 303);
+    header('Location: login.html?unirse=1', true, 303);
     exit;
 }
 if ($usuario['rol'] === 'estudiante') {
@@ -30,5 +30,5 @@ if ($usuario['rol'] === 'estudiante') {
     exit;
 }
 $_SESSION['mensaje_evaluaciones'] = ['texto' => 'Solo las cuentas de estudiante pueden unirse a una clase con código.', 'tipo' => 'warning'];
-header('Location: ' . (dashboardPath($usuario['rol']) ?? 'index.html'), true, 303);
+header('Location: ' . (dashboardPath($usuario['rol']) ?? 'index.php'), true, 303);
 exit;

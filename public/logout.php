@@ -15,5 +15,5 @@ if (!is_string($token) || !hash_equals(csrfToken(), $token)) {
 }
 $eraAdmin = ($_SESSION['rol'] ?? null) === 'administrador';
 destroySession();
-header('Location: ' . ($eraAdmin ? 'admin/index.html' : 'index.html') . '?salida=1', true, 303);
+header('Location: ' . ($eraAdmin ? 'admin/index.html' : 'login.html') . '?salida=1', true, 303);
 exit;
