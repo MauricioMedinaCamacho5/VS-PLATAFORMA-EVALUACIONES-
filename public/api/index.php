@@ -9,7 +9,7 @@ function iniciarSesion(int $id, int $status): never
     if (!session_regenerate_id(true)) {
         throw new RuntimeException('No se pudo regenerar la sesión.');
     }
-    $_SESSION['id'] = $id;
+    $_SESSION['usuario_id'] = $id;
     unset($_SESSION['csrf']);
     $user = currentUser();
     $panel = $user ? dashboardPath($user['rol']) : null;

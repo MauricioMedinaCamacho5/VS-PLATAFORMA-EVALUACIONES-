@@ -74,6 +74,7 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="../assets/css/estilos.css" rel="stylesheet">
     <script src="../assets/js/panel.js" defer></script>
+    <script src="../assets/js/confirmacion.js" defer></script>
     <?php foreach ($scripts ?? [] as $script): ?>
         <script src="<?= escapar($script) ?>" defer></script>
     <?php endforeach; ?>
@@ -125,6 +126,10 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
                     <i class="bi bi-calendar3" aria-hidden="true"></i>
                     <time id="today" datetime="<?= escapar($ahora->format('Y-m-d')) ?>"><?= escapar($fechaHoy) ?></time>
                 </span>
+                    <a class="btn btn-primary" href="../<?= escapar($usuario['rol']) ?>/perfil.php" title="Editar perfil" aria-label="Editar mi perfil">
+                        <i class="bi bi-person-circle me-2" aria-hidden="true"></i>
+                        <span>Mi perfil</span>
+                    </a>
                 <form action="../logout.php" method="post">
                     <input type="hidden" name="csrf" value="<?= escapar(csrfToken()) ?>">
                     <button class="btn btn-outline-primary btn-logout" type="submit">
@@ -158,14 +163,20 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
                 </script>
             <?php endif; ?>
 
+            <?php if (!empty($error)): ?>
+                <div class="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+                    <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i><span><?= escapar($error) ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if (!empty($mensaje)): ?>
+                <div class="alert alert-success d-flex align-items-center gap-2 mb-4" role="status">
+                    <i class="bi bi-check-circle-fill" aria-hidden="true"></i><span><?= escapar($mensaje) ?></span>
+                </div>
+            <?php endif; ?>
+
             <?php if (isset($vista)): ?>
                 <?php require $vista; ?>
             <?php elseif (isset($usuarios)): ?>
-                <?php if ($mensaje !== null): ?>
-                    <div class="alert alert-info d-flex align-items-center gap-2" role="status">
-                        <i class="bi bi-info-circle-fill" aria-hidden="true"></i><span><?= escapar($mensaje) ?></span>
-                    </div>
-                <?php endif; ?>
                 <p class="text-secondary">Selecciona un rol para cada cuenta. Debe permanecer al menos un administrador activo.</p>
                 <div class="user-list">
                     <?php foreach ($usuarios as $cuenta): ?>
@@ -216,5 +227,14 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
         </main>
     </div>
 </div>
+<dialog class="confirmacion" id="dialogo-confirmacion" aria-labelledby="confirmacion-titulo" aria-describedby="confirmacion-mensaje">
+    <div class="confirmacion-icono" aria-hidden="true">!</div>
+    <h2 id="confirmacion-titulo">Confirmar acción</h2>
+    <p id="confirmacion-mensaje"></p>
+    <form method="dialog" class="confirmacion-acciones">
+        <button type="submit" value="cancelar" class="confirmacion-cancelar" autofocus>Cancelar</button>
+        <button type="submit" value="confirmar" class="confirmacion-aceptar" id="confirmacion-aceptar">Continuar</button>
+    </form>
+</dialog>
 </body>
 </html>

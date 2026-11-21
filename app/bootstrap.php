@@ -73,10 +73,15 @@ function csrfToken(): string
     return $_SESSION['csrf'];
 }
 
+function verificarCsrf(string $token): bool
+{
+    return is_string($token) && hash_equals(csrfToken(), $token);
+}
+
 function requireCsrf(): void
 {
     $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-    if (!is_string($token) || !hash_equals(csrfToken(), $token)) {
+    if (!verificarCsrf($token)) {
         respond(403, ['error' => 'La sesión del formulario ha vencido. Recarga la página.']);
     }
 }
@@ -110,7 +115,7 @@ function destroySession(): void
 
 function currentUser(): ?array
 {
-    if (!isset($_SESSION['id']) && !isset($_SESSION['user_id'])) {
+    if (!isset($_SESSION['usuario_id'])) {
         return null;
     }
     $query = db()->prepare(
@@ -118,16 +123,15 @@ function currentUser(): ?array
          FROM usuarios u JOIN roles r ON r.id = u.rol_id
          WHERE u.id = ? AND u.activo = 1'
     );
-    $query->execute([$_SESSION['id'] ?? $_SESSION['user_id']]);
+    $query->execute([$_SESSION['usuario_id']]);
     $user = $query->fetch();
     if ($user === false) {
-        unset($_SESSION['id'], $_SESSION['user_id'], $_SESSION['nombre'], $_SESSION['correo'], $_SESSION['rol']);
+        unset($_SESSION['usuario_id'], $_SESSION['usuario_nombre'], $_SESSION['usuario_correo'], $_SESSION['usuario_rol']);
         return null;
     }
-    $_SESSION['id'] = (int)$user['id'];
-    $_SESSION['nombre'] = $user['nombre'];
-    $_SESSION['correo'] = $user['correo'];
-    $_SESSION['rol'] = $user['rol'];
-    unset($_SESSION['user_id']);
+    $_SESSION['usuario_id'] = (int)$user['id'];
+    $_SESSION['usuario_nombre'] = $user['nombre'];
+    $_SESSION['usuario_correo'] = $user['correo'];
+    $_SESSION['usuario_rol'] = $user['rol'];
     return $user;
 }
