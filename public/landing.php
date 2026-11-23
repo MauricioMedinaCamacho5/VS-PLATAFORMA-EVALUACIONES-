@@ -231,6 +231,34 @@
             transform: translateY(-4px);
         }
 
+        /* Button Admin */
+        .btn-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.2rem;
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            color: var(--color-paper-white);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #DC2626;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #991B1B 0%, #7F1D1D 100%);
+            border-color: #991B1B;
+        }
+
+        .btn-admin i {
+            font-size: 1.1rem;
+        }
+
         /* Features Section */
         .features {
             max-width: 1200px;
@@ -412,6 +440,12 @@
                 <img src="assets/img/logo-claro.svg" alt="" width="44" height="44">
                 <span>Plataforma de Evaluaciones</span>
             </a>
+            <div class="nav-buttons">
+                <a href="admin/index.html" class="btn-admin" title="Acceso de administración">
+                    <i class="bi bi-shield-lock"></i>
+                    Administración
+                </a>
+            </div>
         </div>
     </header>
 
