@@ -47,24 +47,27 @@ try {
 
         if (!$errores) {
             $db->beginTransaction();
+            $publicada = isset($_POST['publicada']) && (int)$_POST['publicada'] === 1 ? 1 : 0;
             if ($evaluacionId === null) {
-                // Toda evaluación nueva se crea como borrador (publicada = 0).
                 $db->prepare(
                     'INSERT INTO evaluaciones (docente_id, titulo, descripcion, tiempo_minutos, apertura, cierre,
                         intentos_permitidos, nota_minima, orden_aleatorio, mostrar_retroalimentacion, publicada)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)'
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 )->execute([
                     $docenteId, $datos['titulo'], $datos['descripcion'], $datos['tiempo_minutos'],
                     $datos['apertura'], $datos['cierre'], $datos['intentos_permitidos'], $datos['nota_minima'],
-                    $datos['orden_aleatorio'], $datos['mostrar_retroalimentacion'],
+                    $datos['orden_aleatorio'], $datos['mostrar_retroalimentacion'], $publicada,
                 ]);
                 $nuevoId = (int)$db->lastInsertId();
                 guardarClasesEvaluacion($db, $nuevoId, $claseIds);
                 registrarAuditoria($db, $docenteId, $nuevoId, 'evaluacion_crear', [
-                    'titulo' => $datos['titulo'], 'clases' => $claseIds,
+                    'titulo' => $datos['titulo'], 'clases' => $claseIds, 'publicada' => $publicada,
                 ]);
                 $db->commit();
-                redirigirConMensaje('evaluaciones.php', 'Evaluación creada como borrador.');
+                $mensaje = $publicada === 1
+                    ? 'Evaluación creada y publicada con éxito.'
+                    : 'Evaluación creada como borrador.';
+                redirigirConMensaje('evaluaciones.php', $mensaje);
             }
 
             $anterior = buscarEvaluacionPropia($db, $evaluacionId, $docenteId, true);
@@ -73,6 +76,9 @@ try {
                 redirigirConMensaje('evaluaciones.php', 'La evaluación no existe o no te pertenece.', 'danger');
             }
             $cambios = camposModificados($anterior, $datos);
+            if ((int)$anterior['publicada'] !== $publicada) {
+                $cambios['publicada'] = ['antes' => (int)$anterior['publicada'], 'despues' => $publicada];
+            }
             $clasesAntes = idsClasesAsignadas($db, $evaluacionId);
             if ($clasesAntes !== $claseIds) {
                 $cambios['clases'] = ['antes' => $clasesAntes, 'despues' => $claseIds];
@@ -83,12 +89,12 @@ try {
             }
             $db->prepare(
                 'UPDATE evaluaciones SET titulo = ?, descripcion = ?, tiempo_minutos = ?, apertura = ?, cierre = ?,
-                    intentos_permitidos = ?, nota_minima = ?, orden_aleatorio = ?, mostrar_retroalimentacion = ?
+                    intentos_permitidos = ?, nota_minima = ?, orden_aleatorio = ?, mostrar_retroalimentacion = ?, publicada = ?
                  WHERE id = ? AND docente_id = ?'
             )->execute([
                 $datos['titulo'], $datos['descripcion'], $datos['tiempo_minutos'], $datos['apertura'],
                 $datos['cierre'], $datos['intentos_permitidos'], $datos['nota_minima'],
-                $datos['orden_aleatorio'], $datos['mostrar_retroalimentacion'],
+                $datos['orden_aleatorio'], $datos['mostrar_retroalimentacion'], $publicada,
                 $evaluacionId, $docenteId,
             ]);
             guardarClasesEvaluacion($db, $evaluacionId, $claseIds);
@@ -108,7 +114,7 @@ try {
 }
 
 $editando = $evaluacionId !== null;
-$publicada = $editando && (int)$existente['publicada'] === 1;
+$publicada = $editando ? ((int)$existente['publicada'] === 1) : true;
 $titulo = $editando ? 'Editar evaluación' : 'Nueva evaluación';
 $seccion = 'evaluaciones';
 $vista = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'vistas'

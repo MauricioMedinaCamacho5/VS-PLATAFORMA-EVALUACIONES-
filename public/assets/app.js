@@ -182,13 +182,17 @@ async function refresh() {
         if (!panels.has(data.panel)) throw new Error('Tu cuenta no tiene un panel válido. Contacta al administrador.');
         document.getElementById('dashboard-link').href = data.panel;
     }
-    const notice = typeof data.aviso_privacidad === 'string' ? data.aviso_privacidad.trim() : '';
-    registrationEnabled = !!notice;
+    const defaultNotice = 'Al registrarte en la plataforma de evaluaciones, autorizas el tratamiento de tus datos personales (nombre y correo electrónico) para la gestión académica, presentación de pruebas y registro de evaluaciones.';
+    const notice = (typeof data.aviso_privacidad === 'string' && data.aviso_privacidad.trim())
+        ? data.aviso_privacidad.trim()
+        : defaultNotice;
+    registrationEnabled = true;
     document.getElementById('privacy').textContent = notice;
-    privacyBox.hidden = !registrationEnabled;
-    registerForm.elements.acepta_privacidad.disabled = !registrationEnabled;
-    registerForm.elements.acepta_privacidad.required = registrationEnabled;
-    registerSubmit.disabled = !registrationEnabled;
+    privacyBox.hidden = false;
+    registerForm.elements.acepta_privacidad.disabled = false;
+    registerForm.elements.acepta_privacidad.required = true;
+    registerForm.elements.acepta_privacidad.checked = true;
+    registerSubmit.disabled = false;
     if (!data.usuario && data.union_pendiente) {
         const {clase, docente, codigo} = data.union_pendiente;
         return `Inicia sesión o crea tu cuenta de estudiante para unirte a «${clase}» (${docente}, código ${codigo}).`;

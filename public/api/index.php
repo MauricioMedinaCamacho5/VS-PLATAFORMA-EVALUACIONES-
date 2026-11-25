@@ -32,6 +32,10 @@ try {
         $user = currentUser();
         $codigoPendiente = codigoUnionPendiente();
         $clasePendiente = $codigoPendiente !== null ? claseActivaPorCodigo(db(), $codigoPendiente) : null;
+        $avisoDefault = 'Al registrarte en la plataforma de evaluaciones, autorizas el tratamiento de tus datos personales (nombre y correo electrónico) para la gestión académica, presentación de pruebas y registro de evaluaciones.';
+        $avisoTexto = (!empty($config['privacy_notice']) && trim((string)$config['privacy_notice']) !== '')
+            ? trim((string)$config['privacy_notice'])
+            : $avisoDefault;
         respond(200, [
             'union_pendiente' => $clasePendiente === null ? null : [
                 'codigo' => $codigoPendiente, 'clase' => $clasePendiente['nombre'], 'docente' => $clasePendiente['docente'],
@@ -40,7 +44,7 @@ try {
             'usuario' => $user,
             'panel' => $user ? dashboardPath($user['rol']) : null,
             'mensaje' => $message,
-            'aviso_privacidad' => $config['privacy_notice'] ?? '',
+            'aviso_privacidad' => $avisoTexto,
         ]);
     }
 
@@ -102,10 +106,10 @@ try {
 
     $name = $input['nombre'] ?? null;
     $role = $input['rol'] ?? null;
-    $notice = $config['privacy_notice'] ?? '';
-    if (!is_string($notice) || trim($notice) === '') {
-        respond(503, ['error' => 'El registro no está habilitado: falta configurar el aviso de privacidad.']);
-    }
+    $avisoDefault = 'Al registrarte en la plataforma de evaluaciones, autorizas el tratamiento de tus datos personales (nombre y correo electrónico) para la gestión académica, presentación de pruebas y registro de evaluaciones.';
+    $notice = (!empty($config['privacy_notice']) && trim((string)$config['privacy_notice']) !== '')
+        ? trim((string)$config['privacy_notice'])
+        : $avisoDefault;
     // Validación del registro campo por campo: la interfaz muestra cada mensaje bajo su campo.
     $errores = [];
     if (!is_string($name) || !mb_check_encoding($name, 'UTF-8') || trim($name) === '') {

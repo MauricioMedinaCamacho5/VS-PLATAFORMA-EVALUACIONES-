@@ -8,7 +8,7 @@
             <div class="perfil-foto-container">
                 <div class="perfil-foto" id="foto-preview" aria-hidden="true">
                     <?php if (!empty($usuario['foto_perfil'])): ?>
-                        <img src="/<?= escapar($usuario['foto_perfil']) ?>" alt="Foto de <?= escapar($usuario['nombre']) ?>" class="perfil-foto-img">
+                        <img src="../<?= escapar($usuario['foto_perfil']) ?>" alt="Foto de <?= escapar($usuario['nombre']) ?>" class="perfil-foto-img">
                     <?php else: ?>
                         <div class="perfil-foto-placeholder">
                             <div class="perfil-avatar"><?= escapar(iniciales($usuario['nombre'])) ?></div>

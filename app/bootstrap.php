@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+date_default_timezone_set('America/Bogota');
+
 $configPath = getenv('EVALUACIONES_CONFIG');
 if ($configPath === false || $configPath === '') {
     $configPath = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'evaluaciones-config' . DIRECTORY_SEPARATOR . 'config.php';
@@ -24,6 +26,12 @@ if (!is_array($config) || !isset($config['db'])) {
 $configIa = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
 if (is_file($configIa)) {
     require_once $configIa;
+}
+if (!defined('GEMINI_API_KEY') && !empty($config['gemini']['api_key'])) {
+    define('GEMINI_API_KEY', $config['gemini']['api_key']);
+}
+if (!defined('GEMINI_MODELO')) {
+    define('GEMINI_MODELO', $config['gemini']['modelo'] ?? 'gemini-1.5-flash');
 }
 
 ini_set('session.use_strict_mode', '1');
@@ -53,6 +61,7 @@ function db(): PDO
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
+        $pdo->exec("SET time_zone = '-05:00'");
     }
     return $pdo;
 }

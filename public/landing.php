@@ -235,13 +235,14 @@
         .btn-admin {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            padding: 0.65rem 1.2rem;
+            padding: 1rem 2rem;
             background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
-            color: var(--color-paper-white);
+            color: #ffffff !important;
             border-radius: var(--radius-full);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-decoration: none;
             transition: all 0.3s ease;
             border: 2px solid #DC2626;
@@ -249,10 +250,11 @@
         }
 
         .btn-admin:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
-            background: linear-gradient(135deg, #991B1B 0%, #7F1D1D 100%);
-            border-color: #991B1B;
+            background: linear-gradient(135deg, #B91C1C 0%, #7F1D1D 100%);
+            border-color: #B91C1C;
+            color: #ffffff !important;
         }
 
         .btn-admin i {
@@ -440,12 +442,6 @@
                 <img src="assets/img/logo-claro.svg" alt="" width="44" height="44">
                 <span>Plataforma de Evaluaciones</span>
             </a>
-            <div class="nav-buttons">
-                <a href="admin/index.html" class="btn-admin" title="Acceso de administración">
-                    <i class="bi bi-shield-lock"></i>
-                    Administración
-                </a>
-            </div>
         </div>
     </header>
 
@@ -567,6 +563,10 @@
         <div class="final-cta-actions">
             <a href="login.html" class="btn-hero btn-primary">Ingresar</a>
             <a href="login.html?registrar=1" class="btn-hero btn-secondary">Crear cuenta</a>
+            <a href="admin/index.html" class="btn-hero btn-admin" title="Acceso de administración">
+                <i class="bi bi-shield-lock"></i>
+                Administración
+            </a>
         </div>
     </section>
 

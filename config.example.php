@@ -11,5 +11,5 @@ return [
         'password' => '',
     ],
     // Debe describir al responsable y las finalidades reales antes de usar el registro.
-    'privacy_notice' => '',
+    'privacy_notice' => 'Al registrarte en la plataforma de evaluaciones, autorizas el tratamiento de tus datos personales (nombre y correo electrónico) para la gestión académica, presentación de pruebas y registro de evaluaciones.',
 ];

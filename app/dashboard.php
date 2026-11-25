@@ -102,13 +102,13 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
             <?php endforeach; ?>
         </nav>
 
-        <div class="sidebar-user">
+        <a class="sidebar-user text-decoration-none text-reset" href="perfil.php" title="Editar mi perfil">
             <span class="avatar" aria-hidden="true"><?= escapar(iniciales($usuario['nombre'])) ?></span>
             <span class="sidebar-user-info">
                 <span class="sidebar-user-name"><?= escapar($usuario['nombre']) ?></span>
                 <span class="sidebar-user-role"><?= escapar($rolVisible) ?></span>
             </span>
-        </div>
+        </a>
     </aside>
     <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
 
@@ -126,7 +126,7 @@ $fechaHoy = ucfirst($dias[(int)$ahora->format('w')]) . ', ' . $ahora->format('j'
                     <i class="bi bi-calendar3" aria-hidden="true"></i>
                     <time id="today" datetime="<?= escapar($ahora->format('Y-m-d')) ?>"><?= escapar($fechaHoy) ?></time>
                 </span>
-                    <a class="btn btn-primary" href="../<?= escapar($usuario['rol']) ?>/perfil.php" title="Editar perfil" aria-label="Editar mi perfil">
+                    <a class="btn btn-primary" href="perfil.php" title="Editar perfil" aria-label="Editar mi perfil">
                         <i class="bi bi-person-circle me-2" aria-hidden="true"></i>
                         <span>Mi perfil</span>
                     </a>

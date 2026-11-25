@@ -66,17 +66,32 @@ function buscarEvaluacionPropia(PDO $db, int $id, int $docenteId, bool $bloquear
 
 function leerFechaFormulario(string $valor): ?DateTimeImmutable
 {
-    $fecha = DateTimeImmutable::createFromFormat('!Y-m-d\TH:i', $valor);
-    return $fecha !== false && $fecha->format('Y-m-d\TH:i') === $valor ? $fecha : null;
+    $valor = trim($valor);
+    if ($valor === '') {
+        return null;
+    }
+    $tz = new DateTimeZone('America/Bogota');
+    $formatos = ['!Y-m-d\TH:i', '!Y-m-d H:i', '!Y-m-d H:i:s', '!d/m/Y h:i A', '!d/m/Y H:i'];
+    foreach ($formatos as $formato) {
+        $fecha = DateTimeImmutable::createFromFormat($formato, $valor, $tz);
+        if ($fecha !== false) {
+            return $fecha;
+        }
+    }
+    return null;
 }
 
 /** Convierte una fila de la base de datos en los valores que muestra el formulario. */
 function valoresFormulario(?array $fila): array
 {
     if ($fila === null) {
+        $ahora = new DateTimeImmutable('now', new DateTimeZone('America/Bogota'));
+        $enUnaSemana = $ahora->modify('+7 days');
         return [
             'titulo' => '', 'descripcion' => '', 'tiempo_minutos' => '60',
-            'apertura' => '', 'cierre' => '', 'intentos_permitidos' => '1',
+            'apertura' => $ahora->format('Y-m-d\TH:i'),
+            'cierre' => $enUnaSemana->format('Y-m-d\TH:i'),
+            'intentos_permitidos' => '1',
             'nota_minima' => '60', 'orden_aleatorio' => false, 'mostrar_retroalimentacion' => false,
             'clases' => [],
         ];
@@ -200,7 +215,14 @@ function camposModificados(array $anterior, array $nuevo): array
 
 function formatoFecha(string $valor): string
 {
-    return date('d/m/Y H:i', strtotime($valor));
+    $ts = strtotime($valor);
+    if ($ts === false) {
+        return $valor;
+    }
+    $fecha = date('d/m/Y', $ts);
+    $hora = date('h:i', $ts);
+    $ampm = date('a', $ts) === 'am' ? 'a. m.' : 'p. m.';
+    return "$fecha $hora $ampm";
 }
 
 // ---------------------------------------------------------------------------
